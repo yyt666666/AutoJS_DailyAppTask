@@ -554,7 +554,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
     }
     if (text("总线索").exists() && IsSign == 0) {
       console.log("前往签到");
-      text("总线索").parent().parent().child(1).child(2).click();
+      text("总线索").findOne().parent().parent().child(1).child(2).click();
       sleep(500);
       if(textContains("点我签到").exists()){
         console.log("点我签到");
@@ -1364,7 +1364,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       console.log("任务完成");
     } else if (taskText.match(/浏览并关注|浏览可得|浏览即可得|逛会场可得|去手Q频道|去下游参加游戏/)) {
       console.log(taskText);
-      let taskItemText = taskButton.parent().child(1).text()
+      let taskItemText = taskButton.parent().parent().child(taskButton.parent().indexInParent() - 3).text();
       if (taskItemText.match(/去种草城/)) {
         taskButton.click();
         sleep(5000);
