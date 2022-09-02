@@ -1,6 +1,5 @@
 /*
   京东<平行时空-签到助力>任务
-  脚本执行时间过长，自动调低手机屏幕亮度，减少电量消耗和发热
 
   20220901 V1.0
   新增脚本
@@ -9,6 +8,10 @@
   增加领取奖励
   20220901 V1.2
   增加活动进入方式
+  20220902 V2.0
+  新增签到判断
+  新增收取气泡
+  修改任务内容，如需做签到，需修改参数为做任务
 */
 let TaskName = "平行时空-签到助力"
 Start(TaskName);
@@ -27,6 +30,7 @@ console.info("开始任务");
   参数1：启动的APP名称，如需手动，则填手动
   参数2：对应参数1的APP名称，是否是分身应用，0：正常应用，1：分身有术Pro内部分身，暂不支持其他分身应用（如是多开分身，可在参数1中直接填入分身应用APP名称即可）
   参数3：助力邀请，0：跳过助力邀请 1：助力邀请  关于<邀请码>：搜索关键字"邀请码"，按规则填入即可互相助力
+  参数4：是否做任务，0：不做任务 1：做任务
  */
 if (files.exists("./账号明细.js")) {
   console.info("发现账号文件");
@@ -41,7 +45,7 @@ if (files.exists("./账号明细.js")) {
     var AccountID = str.split(",");
     if (AccountID[0] == TaskName) {
       console.info("第" + (i + 1) + "行账号符合当前任务，开始执行")
-      Run(AccountID[1], AccountID[2], AccountID[3]); home();
+      Run(AccountID[1], AccountID[2], AccountID[3], AccountID[4]); home();
       console.info("第" + (i + 1) + "行账号任务执行完毕")
       //每5个账号清除一次分身有术的缓存
       if (t > 5 && (t / 5) % 1 === 0) {
@@ -83,7 +87,6 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
   if (ToDoTask == null) {
     ToDoTask = 0 //0：不做任务 1：做任务
   }
-  ToDoTask = 0 //统一不做任务
   var IsSeparation_info = ""
   var IsInvite_info = ""
   var ToDoTask_info = ""
@@ -458,7 +461,8 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
   if (PageStatus != 2) {
     sleep(2000);
     console.log("成功进入活动界面");
-    signTask();
+    let IsSign = 0
+    signTask(IsSign);
     console.log("等待加载弹窗……");
     while (textContains("继续环游").exists() | textContains("立即抽奖").exists() | textContains("开启今日抽奖").exists() | textContains("点我签到").exists() | textContains("开心收下").exists() | textContains("立即签到").exists()) {
       if (textContains("开心收下").exists()) {
@@ -494,6 +498,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
         textContains("明日再来").waitFor();
         console.log("明日再来");
         textContains("明日再来").findOne().parent().child(1).click();
+        IsSign = 1
       }
       if (textContains("点我签到").exists()) {
         console.log("点我签到");
@@ -502,6 +507,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
         textContains("开心收下").waitFor();
         click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
         sleep(1000);
+        IsSign = 1
       }
       if (text("每天签到领次元币大额红包").exists()) {
         text("每天签到领次元币大额红包").findOne().parent().child(1).click();
@@ -511,25 +517,30 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
       console.log("如还有弹窗，请手动处理");
       sleep(3000);
     }
-
-    if (text("立即前往").exists()) {
+    if (text("总线索").exists() && IsSign == 0) {
       console.log("前往签到");
-      click(textContains("立即前往").findOne().bounds().centerX(), textContains("立即前往").findOne().bounds().centerY())
+      text("总线索").parent().parent().child(1).child(2).click();
       sleep(500);
-      console.log("点我签到");
-      click(textContains("点我签到").findOne().bounds().centerX(), textContains("点我签到").findOne().bounds().centerY())
-      sleep(1000);
-      textContains("开心收下").waitFor();
-      click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
-      sleep(1000);
+      if (textContains("点我签到").exists()) {
+        console.log("点我签到");
+        click(textContains("点我签到").findOne().bounds().centerX(), textContains("点我签到").findOne().bounds().centerY())
+        sleep(1000);
+        textContains("开心收下").waitFor();
+        click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
+        sleep(1000);
+      }
+      if (textContains("明日再来").exists()) {
+        console.log("明日再来");
+        textContains("明日再来").findOne().parent().child(1).click();
+      }
+
     }
-    if (text("领取金币").exists()) {
-      console.log("金币已存满");
-      text("领取金币").findOne().parent().click();
-      console.log("金币领取成功");
+    if (text("100").exists()) {
+      console.log("次元币已存满");
+      text("100").findOne().parent().click();
+      console.log("次元币领取成功");
       sleep(2000);
-    }
-    else if (textContains("后满").exists()) {
+    } else if (textContains("后满").exists()) {
       textContains("后满").findOne().parent().click();
       console.log("金币领取成功");
       sleep(2000);
@@ -572,209 +583,6 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
     return;
   }
   if (ToDoTask == 1) {
-    console.log("寻找未完成任务……");
-    while (true) {
-      if (textContains("去组队可得").exists()) {
-        let task1 = textMatches(/.*去组队可得.*/).find()
-        if (task1.empty()) {
-          sleep(100);
-        }
-        else {
-          let task1Button, task1Text
-          let task1img = captureScreen();
-          for (let i = 0; i < task1.length; i++) {
-            let task1item = task1[i]
-            task1Text = task1item.text();
-            task1Button = task1item.parent().child(3);
-            let task1b = task1item.bounds()
-            let task1color = images.pixel(task1img, task1b.left + task1b.width() / 8, task1b.top + task1b.height() / 2)
-            if (colors.isSimilar(task1color, "#fd6526", 50)) {
-              console.log("进行", task1Text);
-              task1Button.click();
-              sleep(2000);
-              console.log("领取成功");
-            }
-          }
-        }
-      }
-      let taskButtons = textMatches(/.*每日6-9点打卡可得.*|.*点击首页浮层可得.*/).find()
-      if (taskButtons.empty()) {
-        console.log("未找到合适的任务，退出");
-        sleep(3000);
-        break;
-      }
-      let taskButton, taskText
-      for (let i = 0; i < taskButtons.length; i++) {
-        let item = taskButtons[i]
-        taskText = item.text();
-        item = item.parent().child(3);
-        let taskTitle = item.parent().child(1).text()
-        let TaskQty = taskTitle.match(/(\d)\/(\d*)/)
-        if (!TaskQty) continue
-        NotTaskQty = (TaskQty[2] - TaskQty[1])
-        if (NotTaskQty) {// 如果数字相减不为0，证明没完成
-          //跳过任务
-          //if (taskText.match(/成功入会/)) continue
-          //if (taskText.match(/品牌墙店铺/)) continue
-          //if (taskText.match(/参与城城点击/)) continue
-          //if (taskText.match(/去组队/)) continue
-          //if (taskText.match(/小程序/)) continue
-          //if (taskText.match(/加购/)) continue
-          //if (taskTitle.match(/种草城/)) continue
-          if (taskTitle.match(/并下单/)) continue
-          if (taskText.match(/参与城城点击/)) continue
-          if (taskText.match(/成功入会/) && IsJoinMember == 0) {
-            console.log("识别到入会任务，当前设置为<不执行入会>，即将进入下一任务");
-            sleep(1000);
-            continue;
-          }
-          if (taskText.match(/参与城城点击/) && IsChengCheng != 0) {
-            console.log("识别到城城任务，当前账号此任务火爆，即将进入下一任务");
-            sleep(1000);
-            continue;
-          }
-          taskButton = item;
-          break;
-        }
-        else {
-          console.log("任务已完成，即将识别下一任务");
-        }
-      }
-      if (!taskButton) {
-        console.log("已完成基础任务，退出当前任务");
-        console.log("完整任务请执行完整脚本");
-        sleep(1000);
-        back();
-        sleep(1000);
-        back();
-        break;
-      }
-
-      if (taskText.match(/每日6-9点打卡/)) {
-        console.log("进行", taskText);
-        taskButton.click();
-        sleep(2000);
-        while (text("立即前往").exists() | text("点我签到").exists()) {
-          if (text("立即前往").exists()) {
-            console.log("前往签到");
-            //textContains("立即前往").findOne().parent().click();
-            click(text("立即前往").findOne().bounds().centerX(), text("立即前往").findOne().bounds().centerY())
-            sleep(500);
-            console.log("点我签到");
-            //textContains("点我签到").findOne().parent().click();
-            click(text("点我签到").findOne().bounds().centerX(), text("点我签到").findOne().bounds().centerY())
-            sleep(1000);
-            textContains("开心收下").waitFor();
-            //textContains("开心收下").findOne().parent().click();
-            click(text("开心收下").findOne().bounds().centerX(), text("开心收下").findOne().bounds().centerY())
-            sleep(1000);
-          }
-          if (text("点我签到").exists()) {
-            console.log("点我签到");
-            //textContains("点我签到").findOne().parent().click();
-            click(text("点我签到").findOne().bounds().centerX(), text("点我签到").findOne().bounds().centerY())
-            sleep(1000);
-            textContains("开心收下").waitFor();
-            //textContains("开心收下").findOne().parent().click();
-            click(text("开心收下").findOne().bounds().centerX(), text("开心收下").findOne().bounds().centerY())
-            sleep(1000);
-          }
-        }
-        console.log("任务完成");
-      } else if (taskText.match(/点击首页浮层可得/)) {
-        console.log("进行", taskText);
-        task1Button.click();
-        sleep(2000);
-        if (!text("累计任务奖励").exists()) {
-          if (!text("消耗").exists() && !text("金币").exists()) {
-            for (var i = 0; !text("消耗").exists() && !text("金币").exists(); i++) {
-              console.log("未识别到活动页面，尝试通过首页浮层进入");
-              if (text("首页").exists()) {
-                let into = descContains("浮层活动").findOne(20000);
-                sleep(2000);
-                if (into == null) {
-                  console.log("无法找到京东活动入口，退出当前任务");
-                  return;
-                }
-                click(into.bounds().centerX(), into.bounds().centerY());
-                click(into.bounds().centerX(), into.bounds().centerY());
-                sleep(3000);
-              }
-              if (i > 10) {
-                console.log("识别超时，退出当前任务");
-                return;
-              }
-              sleep(3000);
-            }
-            if (text("消耗").exists() && text("金币").exists()) {
-              console.log("已检测到活动页面");
-              PageStatus = 1//进入活动页面，未打开任务列表
-            }
-          }
-          else {
-            console.log("检测到活动页面");
-            PageStatus = 1//进入活动页面，未打开任务列表
-          }
-          console.info("准备打开任务列表");
-          let taskListButton = text("分红：").findOne(10000)
-          if (!taskListButton) {
-            console.log("未能识别关键节点，退出当前任务");
-            return;
-          }
-          if (taskListButton.parent().parent().childCount() == 6) {
-            taskListButton.parent().parent().child(4).click();
-          }
-          else {
-            taskListButton.parent().parent().child(5).click();
-          }
-          sleep(1000);
-          /*
-          setScreenMetrics(1440, 3120);//基于分辨率1440*3120的点击
-          click(1242,2436);
-          click(1242,2436);
-          sleep(2000);
-          setScreenMetrics(device.width, device.height);//恢复本机分辨率
-          */
-
-          for (var i = 0; !text("累计任务奖励").exists(); i++) {
-            console.log("未识别到任务列表，请手动打开")
-            sleep(3000);
-            if (i == 1) {
-              console.log("尝试坐标打开")
-              setScreenMetrics(1440, 3120);//基于分辨率1440*3120的点击
-              click(1242, 2436);
-              click(1242, 2436);
-              sleep(2000);
-              setScreenMetrics(device.width, device.height);//恢复本机分辨率
-            }
-            if (i >= 10) {
-              console.log("未按时打开任务列表，退出当前任务");
-              return;
-            }
-          }
-        }
-        else {
-          console.log("检测到任务列表");
-          PageStatus = 2//已打开任务列表
-        }
-        console.log("任务完成");
-      }
-
-      for (var i = 0; !text("累计任务奖励").exists(); i++) {
-        console.log("返回");
-        back();
-        sleep(1000);
-        if (i == 10) {
-          console.log("无法返回任务界面，退出当前任务");
-          return;
-        }
-        if (text("领京豆").exists() && text("首页").exists()) {
-          console.log("发现首页，尝试退出返回原任务列表");
-          OutAPP(500);
-        }
-      }
-      console.info("准备下一个任务");
-    }
     if (text("领取").exists()) {
       console.info("准备领取奖励");
       while (text("领取").exists()) {
@@ -810,7 +618,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
   }
 }
 
-function signTask() {
+function signTask(IsSign) {
   let anchor = className('android.view.View').filter(function (w) {
     return w.clickable() && (w.text() == '去使用奖励' || w.desc() == '去使用奖励')
   }).findOne(5000)
@@ -838,7 +646,7 @@ function signTask() {
     click(sign.bounds().centerX(), sign.bounds().centerY())
     console.log('签到完成，关闭签到弹窗')
   }
-
+  IsSign = 1
   let title = text('每天签到领次元币大额红包').findOne(5000)
   if (!title) {
     console.log('未找到标题，未能自动关闭签到页。')
@@ -847,7 +655,7 @@ function signTask() {
   console.log('关闭签到页')
   title.parent().child(1).click()
 
-  return true
+  return IsSign
 }
 
 
