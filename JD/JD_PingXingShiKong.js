@@ -635,15 +635,15 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       sleep(3000);
       break;
     }
-    let taskButton, taskText
+    let taskButton, taskText, taskTitle
     for (let i = 0; i < taskButtons.length; i++) {
       let item = taskButtons[i]
           taskText = item.text();
       if(item.indexInParent() < 2){
         continue;
       }
-      let taskTitle = item.parent().child(item.indexInParent() - 2).text();
-          taskTitleQty = item.parent().child(item.indexInParent() - 1).text();
+      taskTitle = item.parent().child(item.indexInParent() - 2).text();
+      taskTitleQty = item.parent().child(item.indexInParent() - 1).text();
       let TaskQty = taskTitleQty.match(/(\d)\/(\d*)/)
       if (!TaskQty) continue
       NotTaskQty = (TaskQty[2] - TaskQty[1])
@@ -1364,8 +1364,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       console.log("任务完成");
     } else if (taskText.match(/浏览并关注|浏览可得|浏览即可得|逛会场可得|去手Q频道|去下游参加游戏/)) {
       console.log(taskText);
-      let taskItemText = taskButton.parent().parent().child(taskButton.parent().indexInParent() - 3).text();
-      if (taskItemText.match(/去种草城/)) {
+      if (taskTitle.match(/去种草城/)) {
         taskButton.click();
         sleep(5000);
         if (text("互动种草城").exists()) {
@@ -1427,7 +1426,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
           console.log("等待跳转QQ");
           sleep(4000);
         }
-        if(taskTitle.match(/去下单/)){
+        if(taskText.match(/下单/)){
           console.log("仅浏览，不下单");
           GoShoppingTask = 1
         }
