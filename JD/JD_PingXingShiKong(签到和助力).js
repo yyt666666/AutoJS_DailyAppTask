@@ -519,7 +519,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
     }
     if (text("总线索").exists() && IsSign == 0) {
       console.log("前往签到");
-      text("总线索").parent().parent().child(1).child(2).click();
+      text("总线索").findOne().parent().parent().child(1).child(2).click();
       sleep(500);
       if (textContains("点我签到").exists()) {
         console.log("点我签到");
