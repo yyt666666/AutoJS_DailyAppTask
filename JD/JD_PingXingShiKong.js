@@ -31,6 +31,9 @@
   修复去APP“我的”任务
   20220902 V2.1
   返回增加重进活动页动作
+  20220903 V2.2
+  修改去APP任务
+  缩短浏览任务超时时长
 */
 var TaskName = "平行时空"
 Start(TaskName);
@@ -569,6 +572,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       if(textContains("明日再来").exists()){
         console.log("明日再来");
         textContains("明日再来").findOne().parent().child(1).click();
+        sleep(1000);
       }
 
     }
@@ -774,7 +778,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       }
       else {
         let c = 0
-        while (c < 15) { // 15秒，防止死循环
+        while (c < 10) { // 15秒，防止死循环
           let finish_reg = /获得.*?金币|浏览完成|任务完成|已达上限/
           if ((textMatches(finish_reg).exists() || descMatches(finish_reg).exists())) { // 等待已完成出现，有可能失败
             if (textContains("已达上限").exists()) {
@@ -785,7 +789,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
           }
           sleep(1000);
           c++;
-          if (c == 3 | c == 6 | c == 12) {
+          if (c == 3 | c == 6 | c == 10) {
             console.log("已等待" + c + "秒");
             //财富岛任务无法直接返回，只能跳转返回
             if (app.getAppName(currentPackage()) == "京喜") {
@@ -829,7 +833,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
             }
           }
         }
-        if (c >= 15) {
+        if (c >= 10) {
           console.log("超时，即将返回");
         }
         else {
@@ -996,10 +1000,10 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         click(textContains("立即完成").findOne().bounds().centerX(), textContains("立即完成").findOne().bounds().centerY())
         sleep(1500);
       }
-      if (!text("首页").exists() && IsStartPage == 0) {
-        console.log("未识别到首页，等待5秒待跳转");
-        if (text("首页").findOne(5000) == null) {
-          console.log("未识别到首页，退出活动重进");
+      if (!desc("我的").exists() && IsStartPage == 0) {
+        console.log("未识别到我的，等待5秒待跳转");
+        if (desc("我的").findOne(5000) == null) {
+          console.log("未识别到我的，退出活动重进");
           back();
           sleep(500);
           back();
@@ -1171,10 +1175,10 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       }
       else {
         console.log("未能识别关键节点，重进活动页面");
-        if (!text("首页").exists()) {
-          console.log("未识别到首页，等待5秒待跳转");
-          if (text("首页").findOne(5000) == null) {
-            console.log("未识别到首页，退出活动重进");
+        if (!desc("我的").exists()) {
+          console.log("未识别到我的，等待5秒待跳转");
+          if (desc("我的").findOne(5000) == null) {
+            console.log("未识别到我的，退出活动重进");
             back();
             sleep(500);
             back();
