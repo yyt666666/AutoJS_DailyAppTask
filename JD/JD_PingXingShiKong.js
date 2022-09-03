@@ -34,6 +34,7 @@
   20220903 V2.2
   修改去APP任务
   缩短浏览任务超时时长
+  修改签到任务
 */
 var TaskName = "平行时空"
 Start(TaskName);
@@ -560,7 +561,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
     if (text("总线索").exists() && IsSign == 0) {
       console.log("前往签到");
       text("总线索").findOne().parent().parent().child(1).child(2).click();
-      sleep(500);
+      sleep(2000);
       if(textContains("点我签到").exists()){
         console.log("点我签到");
         click(textContains("点我签到").findOne().bounds().centerX(), textContains("点我签到").findOne().bounds().centerY())
@@ -1350,7 +1351,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         if (text("立即前往").exists()) {
           console.log("前往签到");
           click(text("立即前往").findOne().bounds().centerX(), text("立即前往").findOne().bounds().centerY())
-          sleep(500);
+          sleep(1500);
           console.log("点我签到");
           click(text("点我签到").findOne().bounds().centerX(), text("点我签到").findOne().bounds().centerY())
           sleep(1000);
@@ -1458,7 +1459,8 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       }
       if(text("已发放至“京东APP-我的-优惠券”，可立即使用").exists()){
         console.log("关闭优惠券");
-        text("已发放至“京东APP-我的-优惠券”，可立即使用").findOne().parent().parent().parent().child(1).click();
+        let closebutton = text("已发放至“京东APP-我的-优惠券”，可立即使用").findOne().parent().parent().parent().child(1);
+        click(closebutton.bounds().centerX(),closebutton.bounds().centerY());
         sleep(1500);
       }
       else {
