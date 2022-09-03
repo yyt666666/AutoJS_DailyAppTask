@@ -38,6 +38,8 @@
   增加火爆任务判断
   20220903 V2.3
   新增预约并浏览任务
+  20220904 V2.4
+  修复签到任务
 */
 var TaskName = "平行时空"
 Start(TaskName);
@@ -98,12 +100,12 @@ if (files.exists("./账号明细.js")) {
   file.close();
 }
 else {
-  //京东例子
-  //Run("京东-3",1,1,0);home();
-  //Run("京东",1,1,0);home();
-  //Run("京东-2",1,1,0);home();
+  // 京东例子
+  Run("京东-3",1,1,2);home();
+  Run("京东",1,1,2);home();
+  Run("京东-2",1,1,0);home();
   //手动例子
-  Run("手动", 0, 0, 0); home();
+  //Run("手动", 0, 1, 2); home();
   //分身有术缓存清理
   //CleanCache("分身有术Pro",1);
 }
@@ -565,9 +567,9 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       console.log("前往签到");
       text("总线索").findOne().parent().parent().child(1).child(2).click();
       sleep(2500);
-      if (textContains("点我签到").exists()) {
-        console.log("点我签到");
-        click(textContains("点我签到").findOne().bounds().centerX(), textContains("点我签到").findOne().bounds().centerY())
+      if (textContains("立即签到").exists()) {
+        console.log("立即签到");
+        click(textContains("立即签到").findOne().bounds().centerX(), textContains("立即签到").findOne().bounds().centerY())
         sleep(1000);
         textContains("开心收下").waitFor();
         click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
@@ -1020,9 +1022,9 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       }
       if (!text("累计任务奖励").exists()) {
         if (!(text("赚次元币赢红包").exists())) {
-          for (var i = 0; (!text("赚次元币赢红包").exists()); i++) {
+          for (var i = 0; !text("赚次元币赢红包").exists(); i++) {
             console.log("未识别到活动页面，尝试通过我的进入");
-            if (text("我的").exists()) {
+            if (desc("我的").exists()) {
               desc("我的").findOne().click();
               let into = text("平行时空").findOne(20000);
               sleep(2000);
@@ -1033,13 +1035,12 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
               text("平行时空").findOne().parent().parent().click();
               sleep(3000);
             }
+            if ((text("赚次元币赢红包").exists()) | textContains("等待抽宝箱大奖").exists()) {
+              break;
+            }
             if (i > 10) {
               console.log("识别超时，退出当前任务");
               return;
-            }
-            if (text("累计任务奖励").exists()) {
-              console.log("已检测到任务页面");
-              break;
             }
             sleep(3000);
           }
@@ -1208,6 +1209,9 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
                 text("平行时空").findOne().parent().parent().click();
                 sleep(3000);
               }
+              if ((text("赚次元币赢红包").exists()) | textContains("等待抽宝箱大奖").exists()) {
+                break;
+              }
               if (i > 10) {
                 console.log("识别超时，退出当前任务");
                 return;
@@ -1355,21 +1359,21 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       console.log(taskText);
       taskButton.click();
       sleep(2000);
-      while (text("立即前往").exists() | text("点我签到").exists()) {
+      while (text("立即前往").exists() | text("立即签到").exists()) {
         if (text("立即前往").exists()) {
           console.log("前往签到");
           click(text("立即前往").findOne().bounds().centerX(), text("立即前往").findOne().bounds().centerY())
           sleep(1500);
-          console.log("点我签到");
-          click(text("点我签到").findOne().bounds().centerX(), text("点我签到").findOne().bounds().centerY())
+          console.log("立即签到");
+          click(text("立即签到").findOne().bounds().centerX(), text("立即签到").findOne().bounds().centerY())
           sleep(1000);
           textContains("开心收下").waitFor();
           click(text("开心收下").findOne().bounds().centerX(), text("开心收下").findOne().bounds().centerY())
           sleep(1000);
         }
-        if (text("点我签到").exists()) {
-          console.log("点我签到");
-          click(text("点我签到").findOne().bounds().centerX(), text("点我签到").findOne().bounds().centerY())
+        if (text("立即签到").exists()) {
+          console.log("立即签到");
+          click(text("立即签到").findOne().bounds().centerX(), text("立即签到").findOne().bounds().centerY())
           sleep(1000);
           textContains("开心收下").waitFor();
           click(text("开心收下").findOne().bounds().centerX(), text("开心收下").findOne().bounds().centerY())
@@ -1514,6 +1518,9 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
                   text("平行时空").findOne().parent().parent().click();
                   sleep(3000);
                 }
+                if ((text("赚次元币赢红包").exists()) | textContains("等待抽宝箱大奖").exists()) {
+                  break;
+                }
                 if (i > 10) {
                   console.log("识别超时，退出当前任务");
                   return;
@@ -1579,6 +1586,9 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
                   }
                   text("平行时空").findOne().parent().parent().click();
                   sleep(3000);
+                }
+                if ((text("赚次元币赢红包").exists()) | textContains("等待抽宝箱大奖").exists()) {
+                  break;
                 }
                 if (i > 10) {
                   console.log("识别超时，退出当前任务");
