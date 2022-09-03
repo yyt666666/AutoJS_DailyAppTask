@@ -40,6 +40,7 @@
   新增预约并浏览任务
   20220904 V2.4
   修复签到任务
+  修复手Q频道任务
 */
 var TaskName = "平行时空"
 Start(TaskName);
@@ -101,11 +102,11 @@ if (files.exists("./账号明细.js")) {
 }
 else {
   // 京东例子
-  Run("京东-3",1,1,2);home();
-  Run("京东",1,1,2);home();
-  Run("京东-2",1,1,0);home();
+  // Run("京东-3", 1, 1, 2); home();
+  // Run("京东", 1, 1, 2); home();
+  // Run("京东-2", 1, 1, 0); home();
   //手动例子
-  //Run("手动", 0, 1, 2); home();
+  Run("手动", 0, 1, 2); home();
   //分身有术缓存清理
   //CleanCache("分身有术Pro",1);
 }
@@ -711,9 +712,9 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         if (!textContains('.jpg!q70').exists()) {
           console.log("模式2");
           for (var i = 0; i < 5; i++) {
-            let Model2items = textEndsWith("个商品领1000次元币").findOne();
+            let Model2items = textEndsWith("个商品领1000次元币").findOne(5000);
             if (Model1items.empty()) {
-              console.log("未找到关键控件1，退出");
+              console.log("未找到关键控件2，退出");
               break;
             }
             if (textContains("浏览加购").exists()) {
@@ -861,7 +862,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       if (!textContains('.jpg!q70').exists()) {
         console.log("模式2");
         for (var i = 0; i < 5; i++) {
-          let Model2items = textEndsWith("个商品领1000次元币").findOne();
+          let Model2items = textEndsWith("个商品领1000次元币").findOne(5000);
           if (cart) {
             console.log("第" + (i + 1) + "次加购");
             console.log('待加购');
@@ -1448,7 +1449,19 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         }
         if (taskText.match(/去手Q频道/)) {
           console.log("等待跳转QQ");
-          sleep(4000);
+          for (var t = 0; app.getAppName(currentPackage()) != "QQ" && !text("频道").exists(); t++) {
+            if (t > 10) {
+              console.log("超时未识别到QQ，退出此任务");
+              break;
+            }
+            if (text("加入频道").exists()) {
+              break;
+            }
+            console.log("当前应用名:  " + app.getAppName(currentPackage()) + "\n"
+              + "未识别到QQ相关界面，继续等待……");
+            sleep(3000);
+          }
+          sleep(1500);
         }
         if (taskText.match(/下单/)) {
           console.log("仅浏览，不下单");
