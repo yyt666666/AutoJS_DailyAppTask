@@ -35,7 +35,7 @@
   修改去APP任务
   缩短浏览任务超时时长
   修改签到任务
-  
+  增加火爆任务判断
 */
 var TaskName = "平行时空"
 Start(TaskName);
@@ -1484,6 +1484,66 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
           sleep(1000);
         }
         if (text("累计任务奖励").exists()) break;
+        if(text("健康研究室").exists() && textContains("活动太火爆了").exists()){
+          console.log("健康研究室任务火爆，返回首页重新进入活动");
+          text("去逛逛").findOne().click();
+          if (!text("累计任务奖励").exists()) {
+            if ((!text("赚次元币赢红包").exists())) {
+              for (var i = 0; !text("赚次元币赢红包").exists(); i++) {
+                console.log("未识别到活动页面，尝试通过我的进入");
+                if (desc("我的").exists()) {
+                  desc("我的").findOne().click();
+                  let into = text("平行时空").findOne(20000);
+                  sleep(2000);
+                  if (into == null) {
+                    console.log("无法找到京东活动入口，退出当前任务");
+                    return;
+                  }
+                  text("平行时空").findOne().parent().parent().click();
+                  sleep(3000);
+                }
+                if (i > 10) {
+                  console.log("识别超时，退出当前任务");
+                  return;
+                }
+                sleep(3000);
+              }
+              if ((text("赚次元币赢红包").exists())) {
+                console.log("已检测到活动页面");
+                PageStatus = 1//进入活动页面，未打开任务列表
+              }
+            }
+            else {
+              console.log("检测到活动页面");
+              PageStatus = 1//进入活动页面，未打开任务列表
+            }
+            console.info("打开任务列表");
+            let taskListButton = text("赚次元币赢红包").findOne(10000)
+            if (!taskListButton) {
+              console.log("未能识别关键节点，退出当前任务");
+              return;
+            }
+            taskListButton.parent().click();
+            sleep(1000);
+
+            for (var i = 0; !text("累计任务奖励").exists(); i++) {
+              console.log("未识别到任务列表，请手动打开")
+              sleep(3000);
+              if (i == 1) {
+                console.log("尝试坐标打开")
+                setScreenMetrics(1440, 3120);//基于分辨率1440*3120的点击
+                click(720,2732);
+                click(720,2732);
+                sleep(2000);
+                setScreenMetrics(device.width, device.height);//恢复本机分辨率
+              }
+              if (i >= 10) {
+                console.log("未按时打开任务列表，退出当前任务");
+                return;
+              }
+            }
+          }
+        }
         if ((text("领京豆").exists() && text("首页").exists()) | (app.getAppName(currentPackage()) == "京东" && text("首页").exists())) {
           console.log("发现首页，尝试退出并返回原任务列表");
           OutAPP(100);
