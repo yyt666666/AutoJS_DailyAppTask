@@ -14,6 +14,8 @@
   修改任务内容，如需做签到，需修改参数为做任务
   20220903 V2.1
   修改签到任务
+  20220904 V2.2
+  修复签到任务
 */
 let TaskName = "平行时空-签到助力"
 Start(TaskName);
@@ -523,9 +525,9 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
       console.log("前往签到");
       text("总线索").findOne().parent().parent().child(1).child(2).click();
       sleep(2000);
-      if (textContains("点我签到").exists()) {
-        console.log("点我签到");
-        click(textContains("点我签到").findOne().bounds().centerX(), textContains("点我签到").findOne().bounds().centerY())
+      if (textContains("立即签到").exists()) {
+        console.log("立即签到");
+        click(textContains("立即签到").findOne().bounds().centerX(), textContains("立即签到").findOne().bounds().centerY())
         sleep(1000);
         textContains("开心收下").waitFor();
         click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
