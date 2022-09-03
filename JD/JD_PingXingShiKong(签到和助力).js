@@ -12,6 +12,8 @@
   新增签到判断
   新增收取气泡
   修改任务内容，如需做签到，需修改参数为做任务
+  20220903 V2.1
+  修改签到任务
 */
 let TaskName = "平行时空-签到助力"
 Start(TaskName);
@@ -520,7 +522,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
     if (text("总线索").exists() && IsSign == 0) {
       console.log("前往签到");
       text("总线索").findOne().parent().parent().child(1).child(2).click();
-      sleep(500);
+      sleep(2000);
       if (textContains("点我签到").exists()) {
         console.log("点我签到");
         click(textContains("点我签到").findOne().bounds().centerX(), textContains("点我签到").findOne().bounds().centerY())
