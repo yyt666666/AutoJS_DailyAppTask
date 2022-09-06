@@ -41,6 +41,8 @@
   20220904 V2.4
   修复签到任务
   修复手Q频道任务
+  20220906 V2.5
+  新增首页入口任务
 */
 var TaskName = "平行时空"
 Start(TaskName);
@@ -633,6 +635,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
   }
   let IsChengCheng = 0
   let IsStartPage = 0
+  let IsStartPage_2 = 0
   let IsNotJoinMemberTimes = 0
   let SkipTask = 0
   let GoShoppingTask = 0
@@ -643,7 +646,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       IsJoinMember = 0
       console.log("已连续" + IsNotJoinMemberTimes + "次为新店铺，跳过入会任务");
     }
-    let taskButtons = textMatches(/.*浏览.*s.*|.*浏览.*秒.*|.*去手Q频道.*|.*去下游参加游戏.*|.*累计浏览.*|.*浏览加购.*|.*预约并浏览.*|.*浏览即可得.*|.*浏览并关注.*|.*逛会场可得.*|.*浏览可得.*|.*预约并了解.*|.*成功入会.*|.*小程序.*|.*去组队可得.*|.*每日6-9点打卡可得.*|.*去APP.*|.*参与城城点击.*|.*品牌墙店铺.*|.*玩AR游戏可得.*金币.*/).find()
+    let taskButtons = textMatches(/.*浏览.*s.*|.*浏览.*秒.*|.*首页二屏.*|.*去手Q频道.*|.*去下游参加游戏.*|.*累计浏览.*|.*浏览加购.*|.*预约并浏览.*|.*浏览即可得.*|.*浏览并关注.*|.*逛会场可得.*|.*浏览可得.*|.*预约并了解.*|.*成功入会.*|.*小程序.*|.*去组队可得.*|.*每日6-9点打卡可得.*|.*去APP.*|.*参与城城点击.*|.*品牌墙店铺.*|.*玩AR游戏可得.*金币.*/).find()
     if (taskButtons.empty()) {
       console.log("未找到合适的任务，退出");
       sleep(3000);
@@ -673,6 +676,10 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         //if (taskTitle.match(/种草城/)) continue
         if (taskText.match(/去下游参加游戏可得/) && SkipSmallTask == 1) {
           console.log("此任务火爆，即将进入下一任务");
+          continue
+        }
+        if (taskText.match(/首页二屏/) && IsStartPage_2 == 3) {
+          console.log("此任务无法找到活动入口，跳过");
           continue
         }
         if (taskTitle.match(/并下单/) && GoShoppingTask == 1) continue
@@ -1125,6 +1132,157 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         console.log("任务完成");
       }
       if (IsStartPage == 2) {
+        console.log("领取奖励");
+      }
+
+    } else if (taskText.match(/首页二屏/) && IsStartPage_2 < 2) {
+      console.log(taskText);
+      taskButton.click();
+      sleep(2000);
+      /* 如果任务按钮为去完成，则此处应该有弹窗 */
+      if (textContains("立即完成").exists()) {
+        console.log("立即完成");
+        click(textContains("立即完成").findOne().bounds().centerX(), textContains("立即完成").findOne().bounds().centerY())
+        sleep(1500);
+      }
+      if (!text("首页").exists() && IsStartPage_2 == 0) {
+        console.log("未识别到首页，等待5秒待跳转");
+        if (text("首页").findOne(5000) == null) {
+          console.log("未识别到首页，退出活动重进");
+          back();
+          sleep(500);
+          back();
+        }
+      }
+      if (!text("累计任务奖励").exists()) {
+        if (!(text("赚次元币赢红包").exists())) {
+          for (var i = 0; !text("赚次元币赢红包").exists(); i++) {
+            console.log("尝试通过首页浮层进入");
+            for(var ii=0;text("首页").exists() && !descContains("浮层活动").exists();ii++){
+              swipe(800, 1080, 800, 200, 500);  //从下往上滑动
+              sleep(2000);
+              if(ii == 0){
+                console.log("寻找活动入口");
+              }
+              if(ii == 10){
+                console.log("超时未找到首页入口，通过我的入口返回，并跳过此任务");
+                if (desc("我的").exists()) {
+                  desc("我的").findOne().click();
+                  let into = text("平行时空").findOne(20000);
+                  sleep(2000);
+                  if (into == null) {
+                    console.log("无法找到京东活动入口，退出当前任务");
+                    return;
+                  }
+                  text("平行时空").findOne().parent().parent().click();
+                  sleep(3000);
+                }
+                IsStartPage_2 = 3;
+                break;
+              }
+            }
+            if (descContains("浮层活动").exists()) {
+              let into = descContains("浮层活动").findOne(20000);
+              sleep(2000);
+              if (into == null) {
+                console.log("无法找到京东活动入口，退出当前任务");
+                return;
+              }
+              click(into.bounds().centerX(), into.bounds().centerY());
+              click(into.bounds().centerX(), into.bounds().centerY());
+              sleep(3000);
+            }
+            if ((text("赚次元币赢红包").exists()) | textContains("等待抽宝箱大奖").exists()) {
+              break;
+            }
+            if (i > 10) {
+              console.log("识别超时，退出当前任务");
+              return;
+            }
+            sleep(3000);
+          }
+          if (text("赚次元币赢红包").exists()) {
+            console.log("已检测到活动页面");
+            PageStatus = 1//进入活动页面，未打开任务列表
+          }
+        }
+        else {
+          console.log("检测到活动页面");
+          PageStatus = 1//进入活动页面，未打开任务列表
+        }
+        while (textContains("继续环游").exists() | textContains("立即抽奖").exists() | textContains("开启今日抽奖").exists() | textContains("点我签到").exists() | textContains("开心收下").exists()) {
+          if (textContains("开心收下").exists()) {
+            console.log("开心收下");
+            click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
+            sleep(1000);
+          }
+          if (textContains("继续环游").exists()) {
+            console.log("继续环游");
+            click(textContains("继续环游").findOne().bounds().centerX(), textContains("继续环游").findOne().bounds().centerY())
+            sleep(500);
+          }
+          if (textContains("立即抽奖").exists()) {
+            console.log("关闭立即抽奖");
+            setScreenMetrics(1440, 3120);//基于分辨率1440*3120的点击
+            click(1336, 808);
+            sleep(1000);
+            setScreenMetrics(device.width, device.height);//恢复本机分辨率
+          }
+          if (textContains("开启今日抽奖").exists()) {
+            console.log("开启今日抽奖");
+            click(textContains("开启今日抽奖").findOne().bounds().centerX(), textContains("开启今日抽奖").findOne().bounds().centerY())
+            sleep(3000);
+          }
+          if (textContains("点我签到").exists()) {
+            console.log("点我签到");
+            click(textContains("点我签到").findOne().bounds().centerX(), textContains("点我签到").findOne().bounds().centerY())
+            sleep(1000);
+            textContains("开心收下").waitFor();
+            click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
+            sleep(1000);
+          }
+          if (text("每天签到领次元币大额红包").exists()) {
+            text("每天签到领次元币大额红包").findOne().parent().child(0).click();
+            console.log("关闭签到页面");
+          }
+          sleep(1000);
+          console.log("如还有弹窗，请手动处理");
+          sleep(3000);
+        }
+        if (!text("累计任务奖励").exists()) {
+          console.info("打开任务列表");
+          let taskListButton = text("赚次元币赢红包").findOne(10000)
+          if (!taskListButton) {
+            console.log("未能识别关键节点，退出当前任务");
+            return;
+          }
+          taskListButton.parent().click();
+          sleep(1000);
+        }
+        for (var i = 0; !text("累计任务奖励").exists(); i++) {
+          console.log("未识别到任务列表，请手动打开")
+          sleep(3000);
+          if (i == 1) {
+            console.log("尝试坐标打开")
+            setScreenMetrics(1440, 3120);//基于分辨率1440*3120的点击
+            click(720, 2732);
+            click(720, 2732);
+            sleep(2000);
+            setScreenMetrics(device.width, device.height);//恢复本机分辨率
+          }
+          if (i >= 10) {
+            console.log("未按时打开任务列表，退出当前任务");
+            return;
+          }
+        }
+      }
+      if(IsStartPage_2 == 0 | IsStartPage_2 == 1){
+        IsStartPage_2++
+      }
+      if (IsStartPage_2 == 1) {
+        console.log("任务完成");
+      }
+      if (IsStartPage_2 == 2) {
         console.log("领取奖励");
       }
 
