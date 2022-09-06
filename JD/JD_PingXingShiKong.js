@@ -47,6 +47,9 @@
   尝试修复首页入口任务报错
   手Q频道任务增加次数限制
   调整任务识别时的提示
+  20220906 V2.6.1
+  暂时屏蔽首页二屏任务
+  增加京东健康弹窗关闭动作
 */
 var TaskName = "平行时空"
 Start(TaskName);
@@ -672,6 +675,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
 
       if (NotTaskQty) {// 如果数字相减不为0，证明没完成
         //跳过任务
+        if (taskText.match(/首页二屏/)) continue//暂时先跳过首页任务
         //if (taskText.match(/成功入会/)) continue
         //if (taskText.match(/品牌墙店铺/)) continue
         //if (taskText.match(/参与城城点击/)) continue
@@ -1654,6 +1658,13 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         console.log("暂时离开");
         click(textContains("暂时离开").findOne().bounds().centerX(), textContains("暂时离开").findOne().bounds().centerY())
         sleep(1000);
+      }
+      if (i == 4) {
+        console.log("可能是京东医疗弹窗，尝试坐标点击");
+        setScreenMetrics(1440, 3120);//基于分辨率1440*3120的点击
+        click(720, 2358);
+        sleep(2000);
+        setScreenMetrics(device.width, device.height);//恢复本机分辨率
       }
       if (text("已发放至“京东APP-我的-优惠券”，可立即使用").exists()) {
         console.log("关闭优惠券");
