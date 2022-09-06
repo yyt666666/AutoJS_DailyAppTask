@@ -43,6 +43,10 @@
   修复手Q频道任务
   20220906 V2.5
   新增首页入口任务
+  20220906 V2.6
+  尝试修复首页入口任务报错
+  手Q频道任务增加次数限制
+  调整任务识别时的提示
 */
 var TaskName = "平行时空"
 Start(TaskName);
@@ -638,6 +642,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
   let IsStartPage_2 = 0
   let IsNotJoinMemberTimes = 0
   let SkipTask = 0
+  let GoToQQTask = 0
   let GoShoppingTask = 0
   let SkipSmallTask = 0
   console.log("寻找未完成任务……");
@@ -664,7 +669,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       let TaskQty = taskTitleQty.match(/(\d)\/(\d*)/)
       if (!TaskQty) continue
       NotTaskQty = (TaskQty[2] - TaskQty[1])
-      console.log("当前任务：" + taskTitle)
+
       if (NotTaskQty) {// 如果数字相减不为0，证明没完成
         //跳过任务
         //if (taskText.match(/成功入会/)) continue
@@ -675,15 +680,21 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         //if (taskText.match(/加购/)) continue
         //if (taskTitle.match(/种草城/)) continue
         if (taskText.match(/去下游参加游戏可得/) && SkipSmallTask == 1) {
-          console.log("此任务火爆，即将进入下一任务");
+          console.log("去下游任务火爆，即将进入下一任务");
           continue
         }
         if (taskText.match(/首页二屏/) && IsStartPage_2 == 3) {
-          console.log("此任务无法找到活动入口，跳过");
+          console.log("首页二屏任务无法找到活动入口，跳过");
           continue
         }
-        if (taskTitle.match(/并下单/) && GoShoppingTask == 1) continue
-        if (taskText.match(/参与城城点击/)) continue
+        if (taskTitle.match(/并下单/) && GoShoppingTask == 1) {
+          console.log("已完成部分，跳过");
+          continue
+        }
+        if (taskText.match(/去手Q频道/) && GoToQQTask == 1) {
+          console.log("已尝试完成，避免重复执行，跳过");
+          continue
+        }
         if (taskText.match(/成功入会/) && IsJoinMember == 0) {
           console.log("识别到入会任务，当前设置为<不执行入会>，即将进入下一任务");
           continue;
@@ -699,9 +710,6 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         }
         taskButton = item.parent().child(item.indexInParent() + 1);
         break;
-      }
-      else {
-        console.log("任务已完成，即将识别下一任务");
       }
     }
     if (!taskButton) {
@@ -737,7 +745,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
               console.log("第" + (i + 1) + "次浏览");
               Model2items.parent().parent().child(1).child(i).child(0).child(3).click();
             }
-            sleep(2000);
+            sleep(3000);
             for (var ii = 0; !textEndsWith("个商品领1000次元币").exists(); ii++) {
               if (ii == 0) {
                 console.log("返回");
@@ -776,7 +784,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
               console.log("第" + (i + 1) + "次浏览");
               Model1items[i].parent().parent().child(0).child(3).click();
             }
-            sleep(2000);
+            sleep(3000);
             for (var ii = 0; !textEndsWith("个商品领1000次元币").exists(); ii++) {
               if (ii == 0) {
                 console.log("返回");
@@ -887,7 +895,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
             }
             Model2items.parent().parent().child(1).child(i).child(0).child(3).click();
           }
-          sleep(2000);
+          sleep(3000);
           for (var ii = 0; !textEndsWith("个商品领1000次元币").exists(); ii++) {
             if (ii == 0) {
               console.log("返回");
@@ -930,7 +938,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
             }
             Model1items[i].parent().parent().child(0).child(3).click();
           }
-          sleep(2000);
+          sleep(3000);
           for (var ii = 0; !textEndsWith("个商品领1000次元币").exists(); ii++) {
             if (ii == 0) {
               console.log("返回");
@@ -949,6 +957,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       }
       console.log("浏览商品任务完成");
     }
+    console.log("当前任务：" + taskTitle)
 
     if (taskText.match(/浏览.*s|浏览.*秒/)) {
       console.log(taskText);
@@ -1158,19 +1167,19 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         if (!(text("赚次元币赢红包").exists())) {
           for (var i = 0; !text("赚次元币赢红包").exists(); i++) {
             console.log("尝试通过首页浮层进入");
-            for(var ii=0;text("首页").exists() && !descContains("浮层活动").exists();ii++){
+            for (var ii = 0; text("首页").exists() && !descContains("浮层活动").exists(); ii++) {
               swipe(800, 1080, 800, 200, 500);  //从下往上滑动
               sleep(2000);
-              if(ii == 0){
+              if (ii == 0) {
                 console.log("寻找活动入口");
               }
-              if(ii == 10){
+              if (ii == 10) {
                 console.log("超时未找到首页入口，通过我的入口返回，并跳过此任务");
                 if (desc("我的").exists()) {
                   desc("我的").findOne().click();
-                  let into = text("平行时空").findOne(20000);
+                  let into1 = text("平行时空").findOne(20000);
                   sleep(2000);
-                  if (into == null) {
+                  if (into1 == null) {
                     console.log("无法找到京东活动入口，退出当前任务");
                     return;
                   }
@@ -1276,8 +1285,8 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
           }
         }
       }
-      if(IsStartPage_2 == 0 | IsStartPage_2 == 1){
-        IsStartPage_2++
+      if (IsStartPage_2 != 3) {
+        IsStartPage_2++;
       }
       if (IsStartPage_2 == 1) {
         console.log("任务完成");
@@ -1620,10 +1629,11 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
             sleep(3000);
           }
           sleep(1500);
+          GoToQQTask = 1;
         }
         if (taskText.match(/下单/)) {
           console.log("仅浏览，不下单");
-          GoShoppingTask = 1
+          GoShoppingTask = 1;
         }
       }
       console.log("任务完成");
