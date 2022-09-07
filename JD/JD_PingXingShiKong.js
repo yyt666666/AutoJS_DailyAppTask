@@ -50,6 +50,8 @@
   20220906 V2.6.1
   暂时屏蔽首页二屏任务
   增加京东健康弹窗关闭动作
+  20220907 V2.7
+  修复首页二屏任务
 */
 var TaskName = "平行时空"
 Start(TaskName);
@@ -675,7 +677,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
 
       if (NotTaskQty) {// 如果数字相减不为0，证明没完成
         //跳过任务
-        if (taskText.match(/首页二屏/)) continue//暂时先跳过首页任务
+        //if (taskText.match(/首页二屏/)) continue
         //if (taskText.match(/成功入会/)) continue
         //if (taskText.match(/品牌墙店铺/)) continue
         //if (taskText.match(/参与城城点击/)) continue
@@ -1171,19 +1173,19 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         if (!(text("赚次元币赢红包").exists())) {
           for (var i = 0; !text("赚次元币赢红包").exists(); i++) {
             console.log("尝试通过首页浮层进入");
-            for (var ii = 0; text("首页").exists() && !descContains("浮层活动").exists(); ii++) {
-              swipe(800, 1080, 800, 200, 500);  //从下往上滑动
+            for (var ii = 0; text("首页").exists(); ii++) {
+              swipe((device.width / 3) * 2, (device.height / 6) * 3, (device.width / 3) * 2, (device.height / 6), 500);  //从下往上滑动
               sleep(2000);
               if (ii == 0) {
                 console.log("寻找活动入口");
               }
-              if (ii == 10) {
+              if (ii == 5) {
                 console.log("超时未找到首页入口，通过我的入口返回，并跳过此任务");
                 if (desc("我的").exists()) {
                   desc("我的").findOne().click();
-                  let into1 = text("平行时空").findOne(20000);
+                  let into = text("平行时空").findOne(20000);
                   sleep(2000);
-                  if (into1 == null) {
+                  if (into == null) {
                     console.log("无法找到京东活动入口，退出当前任务");
                     return;
                   }
@@ -1193,16 +1195,19 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
                 IsStartPage_2 = 3;
                 break;
               }
+              if(descContains("浮层活动").findOne().bounds().centerX() > 0){
+                break;
+              }
             }
-            if (descContains("浮层活动").exists()) {
+            if (descContains("浮层活动").exists() && descContains("浮层活动").findOne().bounds().centerX() > 0) {
               let into = descContains("浮层活动").findOne(20000);
               sleep(2000);
               if (into == null) {
                 console.log("无法找到京东活动入口，退出当前任务");
                 return;
               }
-              click(into.bounds().centerX(), into.bounds().centerY());
-              click(into.bounds().centerX(), into.bounds().centerY());
+              click(into.bounds().centerX(),into.bounds().centerY());
+              click(into.bounds().centerX(),into.bounds().centerY());
               sleep(3000);
             }
             if ((text("赚次元币赢红包").exists()) | textContains("等待抽宝箱大奖").exists()) {
