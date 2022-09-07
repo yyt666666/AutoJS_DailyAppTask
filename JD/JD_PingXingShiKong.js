@@ -694,11 +694,11 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
           continue
         }
         if (taskTitle.match(/并下单/) && GoShoppingTask == 1) {
-          console.log("已完成部分，跳过");
+          console.log("下单任务已完成部分，跳过");
           continue
         }
         if (taskText.match(/去手Q频道/) && GoToQQTask == 1) {
-          console.log("已尝试完成，避免重复执行，跳过");
+          console.log("手Q频道任务已尝试完成，避免重复执行，跳过");
           continue
         }
         if (taskText.match(/成功入会/) && IsJoinMember == 0) {
