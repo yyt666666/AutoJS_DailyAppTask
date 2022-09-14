@@ -52,6 +52,8 @@
   增加京东健康弹窗关闭动作
   20220907 V2.7
   修复首页二屏任务
+  20220914 V2.8
+  修复签到跳转到限时任务问题
 */
 var TaskName = "平行时空"
 Start(TaskName);
@@ -577,7 +579,8 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
     }
     if (text("总线索").exists() && IsSign == 0) {
       console.log("前往签到");
-      text("总线索").findOne().parent().parent().child(1).child(2).click();
+      let i = text("总线索").findOne().parent().parent().child(1).childCount();
+      text("总线索").findOne().parent().parent().child(1).child(i - 1).click();
       sleep(2500);
       if (textContains("立即签到").exists()) {
         console.log("立即签到");
@@ -593,6 +596,11 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         sleep(1000);
       }
 
+      if (!text("总线索").exists()) {
+        console.log("页面异常，返回");
+        back();
+        sleep(1000);
+      }
     }
     if (text("100").exists()) {
       console.log("次元币已存满");
@@ -694,11 +702,11 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
           continue
         }
         if (taskTitle.match(/并下单/) && GoShoppingTask == 1) {
-          console.log("下单任务已完成部分，跳过");
+          console.log("已完成部分，跳过");
           continue
         }
         if (taskText.match(/去手Q频道/) && GoToQQTask == 1) {
-          console.log("手Q频道任务已尝试完成，避免重复执行，跳过");
+          console.log("已尝试完成，避免重复执行，跳过");
           continue
         }
         if (taskText.match(/成功入会/) && IsJoinMember == 0) {
@@ -1195,7 +1203,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
                 IsStartPage_2 = 3;
                 break;
               }
-              if(descContains("浮层活动").findOne().bounds().centerX() > 0){
+              if (descContains("浮层活动").findOne().bounds().centerX() > 0) {
                 break;
               }
             }
@@ -1206,8 +1214,8 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
                 console.log("无法找到京东活动入口，退出当前任务");
                 return;
               }
-              click(into.bounds().centerX(),into.bounds().centerY());
-              click(into.bounds().centerX(),into.bounds().centerY());
+              click(into.bounds().centerX(), into.bounds().centerY());
+              click(into.bounds().centerX(), into.bounds().centerY());
               sleep(3000);
             }
             if ((text("赚次元币赢红包").exists()) | textContains("等待抽宝箱大奖").exists()) {
