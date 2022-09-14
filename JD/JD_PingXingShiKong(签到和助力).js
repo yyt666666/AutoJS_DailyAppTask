@@ -16,6 +16,8 @@
   修改签到任务
   20220904 V2.2
   修复签到任务
+  20220914 V2.3
+  修复签到跳转到限时任务问题
 */
 let TaskName = "平行时空-签到助力"
 Start(TaskName);
@@ -523,7 +525,8 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
     }
     if (text("总线索").exists() && IsSign == 0) {
       console.log("前往签到");
-      text("总线索").findOne().parent().parent().child(1).child(2).click();
+      let i = text("总线索").findOne().parent().parent().child(1).childCount();
+      text("总线索").findOne().parent().parent().child(1).child(i - 1).click();
       sleep(2000);
       if (textContains("立即签到").exists()) {
         console.log("立即签到");
@@ -538,6 +541,11 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
         textContains("明日再来").findOne().parent().child(1).click();
       }
 
+      if (!text("总线索").exists()) {
+        console.log("页面异常，返回");
+        back();
+        sleep(1000);
+      }
     }
     if (text("100").exists()) {
       console.log("次元币已存满");
