@@ -18,6 +18,8 @@
   修复签到任务
   20220914 V2.3
   修复签到跳转到限时任务问题
+  20220915 V2.4
+  修复解锁所有场景后不会签到问题
 */
 let TaskName = "平行时空-签到助力"
 Start(TaskName);
@@ -140,7 +142,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
       if (LauchAPPName == "手动") {
         console.log("请手动打开APP，以便进行下一步");
         while (text("领京豆").findOnce() == null) {
-          if ((text("消耗").exists() && text("金币").exists()) | text("立即查看").exists() | textContains("等待抽宝箱大奖").exists() | text("累计任务奖励").exists() |
+          if ((text("消耗").exists() && text("金币").exists()) | text("立即查看").exists() | textContains("开奖啦").exists() | text("累计任务奖励").exists() |
             app.getAppName(currentPackage()) == "京东" | currentActivity() == "com.jingdong.app.mall.MainFrameActivity") {
             break;
           }
@@ -201,7 +203,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
             if (LauchAPPName == "手动") {
               console.log("请手动打开APP，以便进行下一步");
               while (text("领京豆").findOnce() == null) {
-                if ((text("消耗").exists() && text("金币").exists()) | textContains("等待抽宝箱大奖").exists() | text("累计任务奖励").exists() |
+                if ((text("消耗").exists() && text("金币").exists()) | textContains("开奖啦").exists() | text("累计任务奖励").exists() |
                   app.getAppName(currentPackage()) == "京东" | currentActivity() == "com.jingdong.app.mall.MainFrameActivity") {
                   break;
                 }
@@ -310,7 +312,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
     if (LauchAPPName == "手动") {
       console.log("请手动打开APP，以便进行下一步");
       while (text("领京豆").findOnce() == null) {
-        if ((text("消耗").exists() && text("金币").exists()) | textContains("等待抽宝箱大奖").exists() | text("累计任务奖励").exists() |
+        if ((text("消耗").exists() && text("金币").exists()) | textContains("开奖啦").exists() | text("累计任务奖励").exists() |
           app.getAppName(currentPackage()) == "京东" | currentActivity() == "com.jingdong.app.mall.MainFrameActivity") {
           break;
         }
@@ -353,7 +355,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
             if ((text("赚次元币赢红包").exists())) {
               break;
             }
-            if (textContains("等待抽宝箱大奖").exists()) {
+            if (textContains("开奖啦").exists()) {
               break;
             }
             if (textContains("活动太火爆了").exists()) {
@@ -380,7 +382,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
                   click(into.bounds().centerX(), into.bounds().centerY());
                   sleep(3000);
                 }
-                if ((text("赚次元币赢红包").exists()) | textContains("等待抽宝箱大奖").exists()) {
+                if ((text("赚次元币赢红包").exists()) | textContains("开奖啦").exists()) {
                   break;
                 }
                 if (textContains("活动太火爆了").exists()) {
@@ -393,7 +395,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
                 }
                 sleep(3000);
               }
-              if ((text("赚次元币赢红包").exists()) | textContains("等待抽宝箱大奖").exists()) {
+              if ((text("赚次元币赢红包").exists()) | textContains("开奖啦").exists()) {
                 console.log("已检测到活动页面");
                 PageStatus = 1//进入活动页面，未打开任务列表
               }
@@ -441,7 +443,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
           text("平行时空").findOne().parent().parent().click();
           sleep(3000);
         }
-        if ((text("赚次元币赢红包").exists()) | textContains("等待抽宝箱大奖").exists()) {
+        if ((text("赚次元币赢红包").exists()) | textContains("开奖啦").exists()) {
           break;
         }
         if (i > 10) {
@@ -450,7 +452,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
         }
         sleep(3000);
       }
-      if ((text("赚次元币赢红包").exists()) | textContains("等待抽宝箱大奖").exists()) {
+      if ((text("赚次元币赢红包").exists()) | textContains("开奖啦").exists()) {
         console.log("已检测到活动页面");
         PageStatus = 1//进入活动页面，未打开任务列表
       }
@@ -557,7 +559,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
       console.log("金币领取成功");
       sleep(2000);
     }
-    if (textContains("等待抽宝箱大奖").exists()) {
+    if (textContains("开奖啦").exists()) {
       console.info("已满级，跳过任务");
       return;
     }
@@ -591,7 +593,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
       }
     }
   }
-  if (textContains("等待抽宝箱大奖").exists()) {
+  if (textContains("开奖啦").exists()) {
     return;
   }
   if (ToDoTask == 1) {
