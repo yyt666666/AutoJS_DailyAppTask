@@ -25,6 +25,8 @@
   修复新版京东APP下任务报错问题
   20220823 V2.5.1
   修改部分日志提示
+  20220921 V2.6
+  增加去领券逛逛任务
  */
   var TaskName = "秒秒币"
   Start();
@@ -224,6 +226,9 @@
       else if (taskText.match(/参与.*|浏览关注.*/)) {
         RunTask(4);
       }
+      else if (taskText.match(/从首页逛领券/)) {
+        RunTask(5);
+      }
       else {
         RunTask(4);
       }
@@ -375,6 +380,79 @@
         else {
           console.log("任务异常，准备返回");
         }
+      }
+      else if (KeyKind == 5) {
+        if(textContains("去完成任务").exists()){
+          textContains("去完成任务").findOne().click();
+          console.log("去完成任务");
+        }
+        else{
+          console.log("停留5秒，等待跳转");
+          sleep(5000);
+        }
+        for(var i = 0; !text("首页").exists() && !desc("新品").exists(); i++){
+          if (i == 1) {
+            console.log("等待跳转首页");
+          }
+          sleep(1000);
+          if (i > 10) {
+            console.error("领券频道任务异常，退出当前任务");
+            back();
+            sleep(500);
+            back();
+            sleep(500);
+            back();
+            break;
+          }
+        }
+        if (className("android.widget.TextView").text("领券").exists()) {
+          console.info("进入领券");
+          className("android.widget.TextView").text("领券").findOnce().parent().click();
+          sleep(1000);
+        }
+        if (className("android.widget.TextView").text("券后9.9").exists()) {
+          console.info("进入券后9.9");
+          className("android.widget.TextView").text("券后9.9").findOnce().parent().click();
+          sleep(1000);
+        }
+        if(!textContains("任务完成").exists()){
+          console.log("等待任务完成");
+          for(var i = 0; !textContains("任务完成").exists(); i++){
+            if (i == 1) {
+              console.log("等待任务完成");
+            }
+            sleep(1000);
+            if (i > 20) {
+              console.error("已停留20秒，开始返回");
+              back();
+              sleep(500);
+              break;
+            }
+          }
+          if(i < 20){
+            console.log("任务完成");
+          }
+          back();
+          sleep(2000);
+        }
+        if (text("首页").exists() && desc("京东秒杀").exists()) {
+          console.log("首页");
+          sleep(1000);
+          if (desc("京东秒杀").clickable(true).exists()) {
+            console.log("京东秒杀");
+            desc("京东秒杀").clickable(true).findOnce().click();
+            sleep(3000);
+            console.log("任务完成");
+          }
+          if(descContains("连签红包").exists()){
+            console.log("重新进入任务界面");
+            descContains("连签红包").findOne().child(0).click();
+            sleep(3000);
+          }
+        }
+        TaskCheck();
+        //任务列表检测
+        TaskListCheck();
       }
       for (var i = 0; text("秒秒币可兑换更多红包哦").findOne(2000) == null; i++) {
         console.log("返回任务界面");
