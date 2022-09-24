@@ -28,7 +28,7 @@
   20220921 V2.6
   增加去领券逛逛任务
   20220924 V2.7
-  增加是否做跳转任务的参数
+  增加是否做首页类任务的参数
  */
 var TaskName = "秒秒币"
 Start();
@@ -103,7 +103,11 @@ function Run(LauchAPPName, IsSeparation, IsStartPage) {
   if (IsSeparation == null) {
     IsSeparation = 0 //0：正常应用 1：分身有术内部应用
   }
+  if (IsStartPage == null) {
+    IsStartPage = 0 //0：不跳过，1：跳过
+  }
   var IsSeparation_info = ""
+  var IsStartPage_info = ""
   if (IsSeparation == 0) {
     IsSeparation_info = "正常应用"
   } else if (IsSeparation == 1) {
@@ -112,11 +116,20 @@ function Run(LauchAPPName, IsSeparation, IsStartPage) {
     IsSeparation_info = "无效参数，改为默认值“非分身应用”"
     IsSeparation = 0
   }
+  if (IsStartPage == 0) {
+    IsStartPage_info = "不跳过"
+  } else if (IsStartPage == 1) {
+    IsStartPage_info = "跳过"
+  } else {
+    IsStartPage_info = "无效参数，改为默认值“不跳过”"
+    IsStartPage = 0
+  }
   Task_Log = Task_Log + "\n" + LauchAPPName + "-" + IsSeparation_info
   console.info(
     "当前设置" + "\n" +
     "启动APP：" + LauchAPPName + "\n" +
-    "是否分身：" + IsSeparation_info
+    "是否分身：" + IsSeparation_info + "\n" +
+    "是否跳过首页类任务：" + IsStartPage_info
   )
   console.log("复制活动京口令");
   Code = new Array("(I22boFYMgX)");//通过分享链接进入活动界面
@@ -209,7 +222,7 @@ function Run(LauchAPPName, IsSeparation, IsStartPage) {
           return;
         }
         if (taskText.match(/从首页逛/) && IsStartPage != 0) {
-          console.log("跳过逛首页任务");
+          console.log("跳过首页类任务");
           continue;
         }
         taskButton = item
