@@ -56,6 +56,8 @@
   修改首页浏览任务，兼容不同完成标识
   20220823 V7.5.1
   再次修改首页浏览任务完成标识
+  20220927 V7.6
+  新增立领200任务
 */
 var TaskName = "点点券"
 Start(TaskName);
@@ -350,6 +352,10 @@ function Run(LauchAPPName, IsSeparation, IsLotteryDraw) {
         else if (text("领200").exists() && (text("领200").findOnce().parent().parent().child(3).text() == "领取任务"
           | text("领200").findOnce().parent().parent().child(3).text() == "继续完成")) {
           RunTask(2, "领200", 4);
+        }
+        else if (text("立领200").exists() && (text("立领200").findOnce().parent().parent().child(3).text() == "领取任务"
+          | text("立领200").findOnce().parent().parent().child(3).text() == "继续完成")) {
+          RunTask(2, "立领200", 4);
         }
         else if (text("领500").exists() && (text("领500").findOnce().parent().parent().child(3).text() == "领取任务"
           | text("领500").findOnce().parent().parent().child(3).text() == "继续完成")) {
