@@ -29,6 +29,10 @@
   增加去领券逛逛任务
   20220924 V2.7
   增加是否做首页类任务的参数
+  20220930 V2.8
+  增加任务完成后点击返回动作
+  20220930 V2.9
+  修改首页类任务返回方式
  */
 var TaskName = "秒秒币"
 Start();
@@ -297,9 +301,6 @@ function Run(LauchAPPName, IsSeparation, IsStartPage) {
         return;
       }
     }
-    // if(textContains("分享秒杀").exists() && text("去完成").exists()){
-    //   console.log("开始执行任务");
-    // }
   }
 
   function RunTask(KeyKind) {
@@ -336,11 +337,21 @@ function Run(LauchAPPName, IsSeparation, IsStartPage) {
           sleep(3000);
           console.log("任务完成");
         }
-        if (descContains("连签红包").exists()) {
-          console.log("重新进入任务界面");
-          descContains("连签红包").findOne().child(0).click();
-          sleep(3000);
-        }
+        home();
+        EnterTheActivity(Code);
+        // if (descContains("连签红包").exists()) {
+        //   console.log("重新进入任务界面");
+        //   descContains("连签红包").findOne().child(0).click();
+        //   sleep(3000);
+        // }
+        // else if(id("fa").exists()){
+        //   console.log("重新进入任务界面");
+        //   id("fa").findOne().click()
+        //   sleep(3000);
+        // }
+        // else{
+        //   console.error("没有识别到活动入口，需要手动进入");
+        // }
       }
       TaskCheck();
       //任务列表检测
@@ -459,21 +470,23 @@ function Run(LauchAPPName, IsSeparation, IsStartPage) {
         back();
         sleep(2000);
       }
-      if (text("首页").exists() && desc("京东秒杀").exists()) {
-        console.log("首页");
-        sleep(1000);
-        if (desc("京东秒杀").clickable(true).exists()) {
-          console.log("京东秒杀");
-          desc("京东秒杀").clickable(true).findOnce().click();
-          sleep(3000);
-          console.log("任务完成");
-        }
-        if (descContains("连签红包").exists()) {
-          console.log("重新进入任务界面");
-          descContains("连签红包").findOne().child(0).click();
-          sleep(3000);
-        }
-      }
+      home();
+      EnterTheActivity(Code);
+      // if (text("首页").exists() && desc("京东秒杀").exists()) {
+      //   console.log("首页");
+      //   sleep(1000);
+      //   if (desc("京东秒杀").clickable(true).exists()) {
+      //     console.log("京东秒杀");
+      //     desc("京东秒杀").clickable(true).findOnce().click();
+      //     sleep(3000);
+      //     console.log("任务完成");
+      //   }
+      //   if (descContains("连签红包").exists()) {
+      //     console.log("重新进入任务界面");
+      //     descContains("连签红包").findOne().child(0).click();
+      //     sleep(3000);
+      //   }
+      // }
       TaskCheck();
       //任务列表检测
       TaskListCheck();
@@ -655,6 +668,10 @@ function Run(LauchAPPName, IsSeparation, IsStartPage) {
         console.error("识别超时，退出当前任务");
         return;
       }
+      // if(textContains("任务完成").exists()){
+      //   click(textContains("任务完成").findOne().bounds().centerX(),textContains("任务完成").findOne().bounds().centerY())
+      //   sleep(1000);
+      // }
     }
     if (text("天天领红包").exists()) {
       console.info("进入活动界面");
