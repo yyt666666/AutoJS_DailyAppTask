@@ -4,6 +4,8 @@
 
   20221020 V1.0
   新增脚本
+  20221021 V1.1
+  修改去完成点击方式，如果手机不能完整显示任务列表则脚本运行可能报错
 
 */
 var TaskName = "穿行寻宝"
@@ -13,9 +15,9 @@ console.info("开始任务");
 //console.log("降低音量和亮度");
 sleep(2000);
 //备份亮度、声音设置
-let OldBrightnessMode = device.getBrightnessMode()
-let OldBrightness = device.getBrightness()
-let OldMusicVolume = device.getMusicVolume()
+// let OldBrightnessMode = device.getBrightnessMode()
+// let OldBrightness = device.getBrightness()
+// let OldMusicVolume = device.getMusicVolume()
 //调低亮度、声音
 //device.setBrightnessMode(0);
 //device.setBrightness(1);
@@ -70,7 +72,7 @@ else {
   // Run("京东", 1, 1, 2); home();
   // Run("京东-2", 1, 1, 0); home();
   //手动例子
-  Run("手动", 0, 1, 2); home();
+  Run("手动", 0, 0, 2); home();
   //分身有术缓存清理
   //CleanCache("分身有术Pro",1);
 }
@@ -151,7 +153,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         console.log("请手动打开APP，以便进行下一步");
         while (text("领京豆").findOnce() == null) {
           if ((textContains("消耗").exists()) | text("立即查看").exists() | textContains("开奖啦").exists() | text("累计任务奖励").exists() |
-            app.getAppName(currentPackage()) == "京东" | currentActivity() == "com.jingdong.app.mall.MainFrameActivity") {
+            app.getAppName(currentPackage()) == "京东" | currentActivity() == "com.jingdong.app.mall.WebActivity") {
             break;
           }
           console.log("当前应用名:  " + app.getAppName(currentPackage()) + "\n"
@@ -212,7 +214,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
               console.log("请手动打开APP，以便进行下一步");
               while (text("领京豆").findOnce() == null) {
                 if ((textContains("消耗").exists()) | textContains("开奖啦").exists() | text("累计任务奖励").exists() |
-                  app.getAppName(currentPackage()) == "京东" | currentActivity() == "com.jingdong.app.mall.MainFrameActivity") {
+                  app.getAppName(currentPackage()) == "京东" | currentActivity() == "com.jingdong.app.mall.WebActivity") {
                   break;
                 }
                 console.log("当前应用名:  " + app.getAppName(currentPackage()) + "\n"
@@ -276,7 +278,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         console.log("立即查看");
         text("立即查看").findOnce().click();
         while (!textContains("为TA助力").exists()) {
-          sleep(2000);
+          sleep(1000);
           console.log("等待加载……");
           if (textContains("活动太火爆了").exists()) {
             console.error("当前账号火爆，退出任务");
@@ -318,7 +320,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       console.log("请手动打开APP，以便进行下一步");
       while (text("领京豆").findOnce() == null) {
         if ((textContains("消耗").exists()) | textContains("开奖啦").exists() | text("累计任务奖励").exists() |
-          app.getAppName(currentPackage()) == "京东" | currentActivity() == "com.jingdong.app.mall.MainFrameActivity") {
+          app.getAppName(currentPackage()) == "京东" | currentActivity() == "com.jingdong.app.mall.WebActivity") {
           break;
         }
         console.log("当前应用名:  " + app.getAppName(currentPackage()) + "\n"
@@ -476,7 +478,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
     //signTask(IsSign);
     console.log("等待加载弹窗……");
     while (textContains("继续环游").exists() | textContains("立即抽奖").exists() | textContains("开启今日抽奖").exists() | textContains("点我签到").exists() | textContains("开心收下").exists()
-      | textContains("立即签到").exists() | textContains("去用券 享低价").exists()) {
+      | textContains("立即签到").exists() | textContains("去用券 享低价").exists() | textContains("每日签到拿红包").exists()) {
       if (textContains("开心收下").exists()) {
         console.log("开心收下");
         click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
@@ -504,6 +506,11 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         console.log("关闭用券弹窗");
         sleep(1000);
       }
+      if (textContains("每日签到拿红包").exists()) {
+        console.log("每日签到拿红包");
+        click(textContains("每日签到拿红包").findOne().bounds().centerX(), textContains("每日签到拿红包").findOne().bounds().centerY())
+        textContains("立即签到").waitFor();
+      }
       if (textContains("立即签到").exists()) {
         console.log("立即签到");
         click(textContains("立即签到").findOne().bounds().centerX(), textContains("立即签到").findOne().bounds().centerY())
@@ -514,7 +521,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         sleep(1000);
         textContains("明天继续").waitFor();
         console.log("明天继续");
-        textContains("每天签到领福利").findOne().parent().child(1).click()
+        textContains("每天签到领福利").findOne().parent().child(1).click();
         IsSign = 1
       }
       if (textContains("点我签到").exists()) {
@@ -542,16 +549,20 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         console.log("立即签到");
         click(textContains("立即签到").findOne().bounds().centerX(), textContains("立即签到").findOne().bounds().centerY())
         sleep(1000);
-        textContains("开心收下").waitFor();
-        click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
-        sleep(1000);
+        if (textContains("开心收下").exists()) {
+          click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
+          sleep(1000);
+        }
       }
       if (textContains("明天继续").exists()) {
         console.log("明天继续");
         textContains("每天签到领福利").findOne().parent().child(1).click();
         sleep(1000);
       }
-
+      if (textContains("取消").exists()) {
+        textContains("取消").findOne().click();
+        sleep(1000);
+      }
       if (!textContains("消耗").exists()) {
         console.log("页面异常，返回");
         back();
@@ -633,7 +644,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
     }
     let taskButton, taskText, taskTitle
     for (let i = 0; i < taskButtons.length; i++) {
-      let item = taskButtons[i]
+      let item = taskButtons[i];
       taskText = item.text();
       taskTitle = item.parent().child(0).text();
       let TaskQty = taskTitle.match(/(\d)\/(\d*)/)
@@ -658,7 +669,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
           console.log("首页二屏任务无法找到活动入口，跳过");
           continue
         }
-        if (taskTitle.match(/并下单/) && GoShoppingTask == 1) {
+        if (taskText.match(/下单再得/) && GoShoppingTask == 1) {
           console.log("已完成部分，跳过");
           continue
         }
@@ -676,11 +687,27 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         }
         if (taskText.match(/参与城城点击/) && IsChengCheng != 0) {
           console.log("识别到城城任务，当前账号此任务火爆，即将进入下一任务");
-          sleep(1000);
           continue;
         }
-        taskButton = item.parent().parent().child(item.parent().indexInParent() + 1);
-        // console.log(item.parent().parent().bounds().centerX()+","+item.parent().parent().bounds().centerY())
+        taskButton = item.parent().parent().child(5);
+
+        左上角X = item.parent().bounds().right
+        左上角Y = item.parent().bounds().top - 35
+        右下角X = device.width
+        右下角Y = item.parent().bounds().bottom + 35
+        //console.log(左上角X + "," + 左上角Y + "," + 右下角X + "," + 右下角Y)
+        var x = (右下角X - 左上角X) / 2 + 左上角X
+        var y = (右下角Y - 左上角Y) / 2 + 左上角Y
+        click(x, y);
+        // (left, top, right, buttom)
+        // left {number} 范围左边缘与屏幕左边的距离
+        // top {number} 范围上边缘与屏幕上边的距离
+        // right {number} 范围右边缘与屏幕左边的距离
+        // bottom {number} 范围下边缘与屏幕上边的距离
+
+        // console.log(item.text())
+        // console.log(item.parent().parent().parent().indexInParent())
+        // console.log(item.parent().parent().indexInParent())
         // console.log(item.parent().indexInParent())
         // console.log(item.indexInParent())
         // exit();
@@ -694,15 +721,15 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
     }
 
     function timeTask() {
-      taskButton.click();
+      //taskButton.click();
       sleep(1000);
       console.log("等待浏览任务完成……");
-      if (textEndsWith("个商品领1000金币").findOne(3000) != null) {//当前页浏览加购个商品领1000金币|当前页点击浏览个商品领1000金币
+      if (textStartsWith("当前页").findOne(3000) != null) {//当前页浏览加购个商品领1000金币|当前页点击浏览个商品领1000金币
         console.log('任务转为累计类型');
         if (!textContains('.jpg!q70').exists()) {
           console.log("模式2");
-          for (var i = 0; i < 5; i++) {
-            let Model2items = textEndsWith("个商品领1000金币").findOne(5000);
+          for (var i = 0; i < 4; i++) {
+            let Model2items = textStartsWith("当前页").findOne(5000);
             if (Model1items.empty()) {
               console.log("未找到关键控件2，退出");
               break;
@@ -715,13 +742,13 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
                 console.error("界面异常，跳过此商品");
                 continue;
               }
-              Model2items.parent().parent().child(1).child(i).child(0).child(3).click();
+              Model2items.parent().parent().child(1).child(i).child(4).click();
             } else {
               console.log("第" + (i + 1) + "次浏览");
-              Model2items.parent().parent().child(1).child(i).child(0).child(3).click();
+              Model2items.parent().parent().child(1).child(i).child(4).click();
             }
-            sleep(3000);
-            for (var ii = 0; !textEndsWith("个商品领1000金币").exists(); ii++) {
+            sleep(1000);
+            for (var ii = 0; !textStartsWith("当前页").exists(); ii++) {
               if (ii == 0) {
                 console.log("返回");
               } else {
@@ -739,13 +766,13 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         }
         else {
           console.log("模式1");
-          for (var i = 0; i < 5; i++) {
+          for (var i = 0; i < 4; i++) {
             let Model1items = textContains('.jpg!q70').find();
             if (Model1items.empty()) {
               console.log("未找到关键控件1，退出");
               break;
             }
-            if (textContains("浏览加购").exists()) {
+            if (textStartsWith("当前页").exists()) {
               console.log("第" + (i + 1) + "次加购");
               let Model1tmp = Model1items[i].parent().parent();
               console.log('待加购');
@@ -754,13 +781,13 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
                 console.error("界面异常，跳过此商品");
                 continue;
               }
-              Model1tmp.child(3).click();
+              Model1tmp.child(4).click();
             } else {
               console.log("第" + (i + 1) + "次浏览");
-              Model1items[i].parent().parent().child(0).child(3).click();
+              Model1items[i].parent().parent().child(4).click();
             }
-            sleep(3000);
-            for (var ii = 0; !textEndsWith("个商品领1000金币").exists(); ii++) {
+            sleep(1000);
+            for (var ii = 0; !textStartsWith("当前页").exists(); ii++) {
               if (ii == 0) {
                 console.log("返回");
               } else {
@@ -780,26 +807,34 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       }
       else {
         let c = 0
-        while (c < 10) { // 15秒，防止死循环
-          let finish_reg = /获得.*?金币|浏览完成|任务完成|已达上限/
+        while (c < 10) { // 10秒，防止死循环
+          if (textContains("滑动浏览").exists()) {
+            swipe((device.width / 3) * 2 + random(20, 50), (device.height / 6) * 3 + random(20, 50), (device.width / 3) * 2 + random(20, 50), (device.height / 6) + random(20, 50), 500);  //从下往上滑动
+          }
+          else {
+            sleep(500);
+          }
+          sleep(500)
+          let finish_reg = /获得.*?金币|浏览完成|任务完成|已达上限|出错了/
           if ((textMatches(finish_reg).exists() || descMatches(finish_reg).exists())) { // 等待已完成出现，有可能失败
             if (textContains("已达上限").exists()) {
               console.log("已达上限，跳过同类型任务")
               SkipTask = 1
+            } else {
+              console.log(textMatches(finish_reg).findOne().text());
             }
             break;
           }
-          sleep(1000);
           c++;
           if (c == 3 | c == 6 | c == 10) {
-            console.log("已等待" + c + "秒");
+            //console.log("已等待" + c + "秒");
             //财富岛任务无法直接返回，只能跳转返回
             if (app.getAppName(currentPackage()) == "京喜") {
               if (LauchAPPName == "手动") {
                 console.log("请手动返回任务界面，以便进行下一步");
                 while (text("累计任务奖励").findOnce() == null) {
                   if ((textContains("消耗").exists()) |
-                    app.getAppName(currentPackage()) == "京东" | currentActivity() == "com.jingdong.app.mall.MainFrameActivity") {
+                    app.getAppName(currentPackage()) == "京东" | currentActivity() == "com.jingdong.app.mall.WebActivity") {
                     break;
                   }
                   console.log("当前应用名:  " + app.getAppName(currentPackage()) + "\n"
@@ -845,33 +880,33 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
     }
 
     function itemTask(cart) {
-      taskButton.click();
+      //taskButton.click();
       sleep(1000);
       console.log("等待进入商品列表……");
-      textEndsWith("个商品领1000金币").waitFor();//当前页浏览加购个商品领1000金币|当前页点击浏览个商品领1000金币
+      textStartsWith("当前页").waitFor();//当前页浏览加购 个商品领金币|当前页点击浏览 个商品领金币
       if (!textContains('.jpg!q70').exists()) {
         console.log("模式2");
-        for (var i = 0; i < 5; i++) {
-          let Model2items = textEndsWith("个商品领1000金币").findOne(5000);
+        for (var i = 0; i < 4; i++) {
+          let Model2items = textStartsWith("当前页").findOne(5000);
           if (cart) {
             console.log("第" + (i + 1) + "次加购");
             console.log('待加购');
             sleep(200);
-            if (!Model2items.parent().parent().child(1).child(i).child(0).child(3)) {
+            if (!Model2items.parent().parent().child(1).child(i).child(4)) {
               console.error("界面异常，跳过此商品");
               continue;
             }
-            Model2items.parent().parent().child(1).child(i).child(0).child(3).click();
+            Model2items.parent().parent().child(1).child(i).child(4).click();
           } else {
             console.log("第" + (i + 1) + "次浏览");
-            if (!Model2items.parent().parent().child(1).child(i).child(0).child(3)) {
+            if (!Model2items.parent().parent().child(1).child(i).child(4)) {
               console.error("界面异常，跳过此商品");
               continue;
             }
-            Model2items.parent().parent().child(1).child(i).child(0).child(3).click();
+            Model2items.parent().parent().child(1).child(i).child(4).click();
           }
-          sleep(3000);
-          for (var ii = 0; !textEndsWith("个商品领1000金币").exists(); ii++) {
+          sleep(1000);
+          for (var ii = 0; !textStartsWith("当前页").exists(); ii++) {
             if (ii == 0) {
               console.log("返回");
             } else {
@@ -889,7 +924,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       }
       else {
         console.log("模式1");
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < 4; i++) {
           let Model1items = textContains('.jpg!q70').find();
           if (Model1items.empty()) {
             console.log("未找到关键控件1，退出");
@@ -904,17 +939,17 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
               console.error("界面异常，跳过此商品");
               continue;
             }
-            Model1tmp.child(3).click();
+            Model1tmp.child(4).click();
           } else {
             console.log("第" + (i + 1) + "次浏览");
             if (!Model1items) {
               console.error("界面异常，跳过此商品");
               continue;
             }
-            Model1items[i].parent().parent().child(0).child(3).click();
+            Model1items[i].parent().parent().child(4).click();
           }
-          sleep(3000);
-          for (var ii = 0; !textEndsWith("个商品领1000金币").exists(); ii++) {
+          sleep(1000);
+          for (var ii = 0; !textStartsWith("当前页").exists(); ii++) {
             if (ii == 0) {
               console.log("返回");
             } else {
@@ -939,7 +974,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       timeTask();
     } else if (taskText.match(/参与城城点击/) && IsChengCheng == 0) {
       console.log(taskText);
-      taskButton.click();
+      //taskButton.click();
       sleep(2000);
       for (var ii = 0; !text("邀请新朋友 更快赚现金").exists(); ii++) {
         console.log("等待识别助力状态");
@@ -995,7 +1030,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       }
     } else if (taskText.match(/去APP/) && IsStartPage < 2) {
       console.log(taskText);
-      taskButton.click();
+      //taskButton.click();
       sleep(2000);
       /* 如果任务按钮为去完成，则此处应该有弹窗 */
       if (textContains("立即完成").exists()) {
@@ -1144,7 +1179,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       }
     } else if (taskText.match(/首页二屏/) && IsStartPage_2 < 2) {
       console.log(taskText);
-      taskButton.click();
+      //taskButton.click();
       sleep(2000);
       /* 如果任务按钮为去完成，则此处应该有弹窗 */
       if (textContains("立即完成").exists()) {
@@ -1321,11 +1356,33 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       }
     } else if (taskText.match(/品牌墙店铺/)) {
       console.log(taskText);
-      taskButton.click();
+      //taskButton.click();
       sleep(2000);
-      if (textContains("消耗").exists()) {
-        var task2 = textContains("消耗").findOne().parent().parent().parent().parent().parent().parent().child(16)
-        for (var i = 0; i < 10; i++) {
+      if (taskText.match(/浏览5个/)) {
+        var task2 = textContains("到底了，没有更多").findOne().parent().child(14).child(0)
+        for (var i = 0; i < 5; i++) {
+          console.log("第" + (i + 1) + "个店铺");
+          if (task2.childCount() < 14) {
+            console.error("界面异常，跳过任务");
+            break;
+          }
+          var task2DianPu = task2.child(i + 1)
+          task2DianPu.click();
+          sleep(3500);
+          for (var ii = 0; !textContains("后满").exists(); ii++) {
+            console.log("返回")
+            back();
+            sleep(1500);
+            if (ii > 4) {
+              console.log("返回活动界面，退出当前任务");
+              return;
+            }
+          }
+        }
+      }
+      if (textContains("到底了，没有更多").exists()) {
+        var task2 = textContains("到底了，没有更多").findOne().parent().child(16)
+        for (var i = 0; i < 10 && !taskText.match(/浏览5个/); i++) {
           sleep(1000);
           if (i == 1) {
             console.log("等待任务完成");
@@ -1452,7 +1509,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       }
     } else if (taskText.match(/去组队可得/)) {
       console.log(taskText);
-      taskButton.click();
+      //taskButton.click();
       sleep(3000);
       for (var ii = 0; !text("累计任务奖励").exists(); ii++) {
         sleep(1000);
@@ -1492,7 +1549,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       }
     } else if (taskText.match(/小程序/)) {
       console.log(taskText);
-      taskButton.click();
+      //taskButton.click();
       sleep(3000);
       while (id("ffp").exists() | id("gv3").exists() | text("确定").exists()) {
         if (id("ffp").exists() | id("gv3").exists()) {
@@ -1514,7 +1571,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       console.log("任务完成");
     } else if (taskText.match(/成功入会/)) {
       console.log(taskText);
-      taskButton.click();
+      //taskButton.click();
       sleep(4000);
       if (textContains("确认授权并加入店铺会员").exists()) {
         if (IsJoinMember == 2) {
@@ -1537,7 +1594,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       }
     } else if (taskText.match(/预约并了解|玩AR游戏可得|每日6-9点打卡/)) {
       console.log(taskText);
-      taskButton.click();
+      //taskButton.click();
       sleep(2000);
       while (text("立即前往").exists() | text("立即签到").exists()) {
         if (text("立即前往").exists()) {
@@ -1564,7 +1621,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
     } else if (taskText.match(/浏览并关注|预约并浏览|浏览可得|浏览即可得|逛会场可得|去手Q频道|去下游参加游戏/)) {
       console.log(taskText);
       if (taskTitle.match(/去种草城/)) {
-        taskButton.click();
+        //taskButton.click();
         sleep(5000);
         if (text("互动种草城").exists()) {
           if (textContains("/3）").exists()) {
@@ -1619,7 +1676,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
           }
         }
       } else {
-        taskButton.click();
+        //taskButton.click();
         if (taskText.match(/去下游参加游戏/)) {
           sleep(800);
         }
@@ -1700,24 +1757,22 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
           sleep(1000);
         }
         if (text("累计任务奖励").exists()) break;
-        if (text("健康研究室").exists() && textContains("活动太火爆了").exists()) {
-          console.log("健康研究室任务火爆，返回首页重进活动，跳过此任务");
-          text("去逛逛").findOne().click();
+        console.info("准备下一个任务");
+        if (text("首页").exists()) {
+          console.log("识别到首页，重进活动");
           if (!text("累计任务奖励").exists()) {
-            if ((!textContains("消耗").exists())) {
+            if (!(textContains("消耗").exists())) {
               for (var i = 0; !textContains("消耗").exists(); i++) {
-                console.log("未识别到活动页面，尝试通过首页浮层进入");
-                if (text("首页").exists()) {
-                  let into = descContains("浮层活动").findOne(20000);
-                  sleep(2000);
-                  if (into == null) {
-                    console.log("无法找到京东活动入口，退出当前任务");
-                    return;
-                  }
-                  click(into.bounds().centerX(), into.bounds().centerY());
-                  click(into.bounds().centerX(), into.bounds().centerY());
-                  sleep(3000);
+                console.log("尝试通过首页浮层进入");
+                let into = descContains("浮层活动").findOne(20000);
+                sleep(2000);
+                if (into == null) {
+                  console.log("无法找到京东活动入口，退出当前任务");
+                  return;
                 }
+                click(into.bounds().centerX(), into.bounds().centerY());
+                click(into.bounds().centerX(), into.bounds().centerY());
+                sleep(3000);
                 if ((textContains("消耗").exists()) | textContains("开奖啦").exists()) {
                   break;
                 }
@@ -1727,7 +1782,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
                 }
                 sleep(3000);
               }
-              if ((textContains("消耗").exists())) {
+              if (textContains("消耗").exists()) {
                 console.log("已检测到活动页面");
                 PageStatus = 1//进入活动页面，未打开任务列表
               }
@@ -1736,76 +1791,66 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
               console.log("检测到活动页面");
               PageStatus = 1//进入活动页面，未打开任务列表
             }
-            console.info("打开任务列表");
-            let taskListButton = textContains("消耗").findOne(10000)
-            if (!taskListButton) {
-              console.log("未能识别到关键节点，退出当前任务");
-              return;
-            }
-            taskListButton.parent().parent().parent().parent().child(3).click();
-            sleep(1000);
-            for (var i = 0; !text("累计任务奖励").exists(); i++) {
-              if (textContains("邀请好友助力").exists()) {
-                break;
+            while (textContains("继续环游").exists() | textContains("立即抽奖").exists() | textContains("开启今日抽奖").exists() | textContains("点我签到").exists() | textContains("开心收下").exists()
+              | textContains("立即签到").exists() | textContains("去用券 享低价").exists()) {
+              if (textContains("开心收下").exists()) {
+                console.log("开心收下");
+                click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
+                sleep(1000);
               }
-              console.log("未识别到任务列表，请手动打开")
-              sleep(3000);
-              if (i == 1) {
-                console.log("尝试坐标打开")
+              if (textContains("继续环游").exists()) {
+                console.log("继续环游");
+                click(textContains("继续环游").findOne().bounds().centerX(), textContains("继续环游").findOne().bounds().centerY())
+                sleep(500);
+              }
+              if (textContains("立即抽奖").exists()) {
+                console.log("关闭立即抽奖");
                 setScreenMetrics(1440, 3120);//基于分辨率1440*3120的点击
-                click(1260, 2598);
-                click(1260, 2598);
-                sleep(2000);
+                click(1336, 808);
+                sleep(1000);
                 setScreenMetrics(device.width, device.height);//恢复本机分辨率
               }
-              if (i >= 10) {
-                console.log("超时未打开任务列表，退出当前任务");
-                return;
+              if (textContains("开启今日抽奖").exists()) {
+                console.log("开启今日抽奖");
+                click(textContains("开启今日抽奖").findOne().bounds().centerX(), textContains("开启今日抽奖").findOne().bounds().centerY())
+                sleep(3000);
               }
-            }
-            SkipSmallTask = 1
-          }
-          if ((text("领京豆").exists() && text("首页").exists()) | (app.getAppName(currentPackage()) == "京东" && text("首页").exists())) {
-            console.log("发现首页，尝试退出并返回原任务列表");
-            OutAPP(100);
-            sleep(2000);
-            if (text("累计任务奖励").exists()) {
-              console.log("已返回任务列表");
-              break;
+              if (textContains("去用券 享低价").exists()) {
+                textContains("去用券 享低价").findOne().parent().parent().parent().child(0).click();
+                console.log("关闭用券弹窗");
+                sleep(1000);
+              }
+              if (textContains("立即签到").exists()) {
+                console.log("立即签到");
+                click(textContains("立即签到").findOne().bounds().centerX(), textContains("立即签到").findOne().bounds().centerY())
+                sleep(1000);
+                textContains("开心收下").waitFor();
+                console.log("开心收下");
+                click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
+                sleep(1000);
+                textContains("明天继续").waitFor();
+                console.log("明天继续");
+                textContains("每天签到领福利").findOne().parent().child(1).click()
+                IsSign = 1
+              }
+              if (textContains("点我签到").exists()) {
+                console.log("点我签到");
+                click(textContains("点我签到").findOne().bounds().centerX(), textContains("点我签到").findOne().bounds().centerY())
+                sleep(1000);
+                textContains("开心收下").waitFor();
+                click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
+                sleep(1000);
+                IsSign = 1
+              }
+              if (text("每天签到领福利").exists()) {
+                text("每天签到领福利").findOne().parent().child(1).click();
+                console.log("关闭签到页面");
+              }
+              sleep(1000);
+              console.log("如还有弹窗，请手动处理");
+              sleep(3000);
             }
             if (!text("累计任务奖励").exists()) {
-              if ((!textContains("消耗").exists())) {
-                for (var i = 0; !textContains("消耗").exists(); i++) {
-                  console.log("未识别到活动页面，尝试通过首页浮层进入");
-                  if (text("首页").exists()) {
-                    let into = descContains("浮层活动").findOne(20000);
-                    sleep(2000);
-                    if (into == null) {
-                      console.log("无法找到京东活动入口，退出当前任务");
-                      return;
-                    }
-                    click(into.bounds().centerX(), into.bounds().centerY());
-                    click(into.bounds().centerX(), into.bounds().centerY());
-                    sleep(3000);
-                  }
-                  if ((textContains("消耗").exists()) | textContains("开奖啦").exists()) {
-                    break;
-                  }
-                  if (i > 10) {
-                    console.log("识别超时，退出当前任务");
-                    return;
-                  }
-                  sleep(3000);
-                }
-                if ((textContains("消耗").exists())) {
-                  console.log("已检测到活动页面");
-                  PageStatus = 1//进入活动页面，未打开任务列表
-                }
-              }
-              else {
-                console.log("检测到活动页面");
-                PageStatus = 1//进入活动页面，未打开任务列表
-              }
               console.info("打开任务列表");
               let taskListButton = textContains("消耗").findOne(10000)
               if (!taskListButton) {
@@ -1833,17 +1878,9 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
                   return;
                 }
               }
-              if (i > 1 && text("首页").exists() && desc("新品").exists()) {
-                console.log("首页异常，尝试刷新");
-                desc("新品").findOne().click();
-                sleep(500);
-                desc("首页").findOne().click();
-                sleep(1500);
-              }
             }
           }
         }
-        console.info("准备下一个任务");
         if (textContains("重新连接").exists()) {
           console.info("尝试重新连接");
           textContains("重新连接").findOne().click();
@@ -1851,68 +1888,34 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         }
         sleep(1000);
       }
-
-      sleep(2000);
-      if (textContains("去领取").exists()) {
-        console.info("准备领取奖励");
-        while (textContains("去领取").exists()) {
-          textContains("去领取").findOne().parent().click();
-          sleep(2500);
-          if (textContains("去用券 享低价").exists()) {
-            textContains("去用券 享低价").findOne().parent().parent().parent().child(0).click();
-            console.log("关闭用券弹窗");
-            sleep(1000);
-          }
-        }
-        console.info("奖励领取完毕");
-      }
-      sleep(500);
-      back();
-      sleep(500);
-      back();
     }
-
-    function signTask(IsSign) {
-      let anchor = filter(function (w) {
-        return w.clickable() && (w.text() == '去使用奖励' || w.desc() == '去使用奖励')
-      }).findOne(5000)
-
-      if (!anchor) {
-        console.log('未找到使用奖励按钮，签到失败')
-        return false
-      }
-
-      let anchor_index = anchor.indexInParent()
-      let sign = anchor.parent().child(anchor_index + 2) // 去使用的后两个
-      sign.click()
-
-      sign = textMatches(/.*立即签到.*|.*明天继续.*|.*已完成.*/).findOne(5000)
-      if (!sign) {
-        console.log('未找到签到按钮')
-        return false
-      }
-
-      if (sign.text().match(/明天继续/)) {
-        console.log('已经签到')
-      } else if (sign.text().match(/已完成/)) {
-        console.log('已完成所有签到')
-      } else {
-        click(sign.bounds().centerX(), sign.bounds().centerY())
-        console.log('签到完成，关闭签到弹窗')
-      }
-      IsSign = 1
-      let title = text('每天签到领福利').findOne(5000)
-      if (!title) {
-        console.log('未找到标题，未能自动关闭签到页。')
-        return false
-      }
-      console.log('关闭签到页')
-      title.parent().child(1).click()
-
-      return IsSign
-    }
+    sleep(2000);
   }
+  if (textContains("去领取").exists()) {
+    console.info("准备领取奖励");
+    while (textContains("去领取").exists()) {
+      textContains("去领取").findOne().parent().click();
+      sleep(2500);
+      if (textContains("去用券 享低价").exists()) {
+        textContains("去用券 享低价").findOne().parent().parent().parent().child(0).click();
+        console.log("关闭用券弹窗");
+        sleep(1000);
+      }
+      if (textContains("开心收下").exists()) {
+        textContains("开心收下").findOne().parent().parent().parent().child(0).click();
+        console.log("开心收下");
+        sleep(1000);
+      }
+    }
+    console.info("奖励领取完毕");
+  }
+  sleep(500);
+  back();
+  sleep(500);
+  back();
 }
+
+
 function CleanCache(LauchAPPName, Isclean) {
   if (LauchAPPName == "分身有术Pro" && Isclean == 1) {
     console.info("打开分身有术Pro，准备清理缓存");
