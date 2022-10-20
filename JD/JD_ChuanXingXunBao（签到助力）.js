@@ -4,6 +4,8 @@
 
   20221020 V1.0
   新增脚本
+  20221021 V1.1
+  增加新的弹窗处理
 
 */
 var TaskName = "穿行寻宝-签到助力"
@@ -442,7 +444,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
     //signTask(IsSign);
     console.log("等待加载弹窗……");
     while (textContains("继续环游").exists() | textContains("立即抽奖").exists() | textContains("开启今日抽奖").exists() | textContains("点我签到").exists() | textContains("开心收下").exists()
-      | textContains("立即签到").exists() | textContains("去用券 享低价").exists()) {
+      | textContains("立即签到").exists() | textContains("去用券 享低价").exists() | textContains("每日签到拿红包").exists()) {
       if (textContains("开心收下").exists()) {
         console.log("开心收下");
         click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
@@ -470,6 +472,11 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         console.log("关闭用券弹窗");
         sleep(1000);
       }
+      if (textContains("每日签到拿红包").exists()) {
+        console.log("每日签到拿红包");
+        click(textContains("每日签到拿红包").findOne().bounds().centerX(), textContains("每日签到拿红包").findOne().bounds().centerY())
+        textContains("立即签到").waitFor();
+      }
       if (textContains("立即签到").exists()) {
         console.log("立即签到");
         click(textContains("立即签到").findOne().bounds().centerX(), textContains("立即签到").findOne().bounds().centerY())
@@ -480,7 +487,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         sleep(1000);
         textContains("明天继续").waitFor();
         console.log("明天继续");
-        textContains("每天签到领福利").findOne().parent().child(1).click()
+        textContains("每天签到领福利").findOne().parent().child(1).click();
         IsSign = 1
       }
       if (textContains("点我签到").exists()) {
@@ -508,17 +515,17 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         console.log("立即签到");
         click(textContains("立即签到").findOne().bounds().centerX(), textContains("立即签到").findOne().bounds().centerY())
         sleep(1000);
-        textContains("开心收下").waitFor();
-        click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
-        sleep(1000);
+        if (textContains("开心收下").exists()) {
+          click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
+          sleep(1000);
+        }
       }
       if (textContains("明天继续").exists()) {
         console.log("明天继续");
         textContains("每天签到领福利").findOne().parent().child(1).click();
         sleep(1000);
       }
-      IsSign = 1
-      if(textContains("取消").exists()){
+      if (textContains("取消").exists()) {
         textContains("取消").findOne().click();
         sleep(1000);
       }
