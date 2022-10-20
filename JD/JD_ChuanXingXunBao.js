@@ -6,6 +6,7 @@
   新增脚本
   20221021 V1.1
   修改去完成点击方式，如果手机不能完整显示任务列表则脚本运行可能报错
+  增加新的弹窗处理
 
 */
 var TaskName = "穿行寻宝"
@@ -632,6 +633,11 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
   let SkipSmallTask = 0
   console.log("寻找未完成任务……");
   while (true) {
+    if (textContains("去用券 享低价").exists()) {
+      textContains("去用券 享低价").findOne().parent().parent().parent().child(0).click();
+      console.log("关闭用券弹窗");
+      sleep(1000);
+    }
     if (IsNotJoinMemberTimes == 4 && IsJoinMember != 0) {
       IsJoinMember = 0
       console.log("已连续" + IsNotJoinMemberTimes + "次为新店铺，跳过入会任务");
