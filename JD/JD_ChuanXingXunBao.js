@@ -15,6 +15,8 @@
   修改品牌墙浏览界面异常判断
   20221021 V1.5
   修改首页返回判断
+  20221021 V1.6
+  新增默认浏览任务
 
 */
 var TaskName = "穿行寻宝"
@@ -685,7 +687,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         //if (taskText.match(/加购/)) continue
         //if (taskTitle.match(/种草城/)) continue
         if (taskText.match(/去下游参加游戏可得/) && SkipSmallTask == 1) {
-          console.log("去下游任务火爆，即将进入下一任务");
+          console.log("下游任务当前账号活动火爆，跳过");
           continue
         }
         if (taskText.match(/首页二屏/) && IsStartPage_2 == 3) {
@@ -693,15 +695,15 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
           continue
         }
         if (taskText.match(/下单再得/) && GoShoppingTask == 1) {
-          console.log("已完成部分，跳过");
+          console.log("下单任务已完成浏览部分，跳过");
           continue
         }
         if (taskText.match(/去手Q频道/) && GoToQQTask == 1) {
-          console.log("已尝试完成，避免重复执行，跳过");
+          console.log("手Q任务已尝试完成，避免重复执行，跳过");
           continue
         }
         if (taskText.match(/成功入会/) && IsJoinMember == 0) {
-          console.log("识别到入会任务，当前设置为<不执行入会>，即将进入下一任务");
+          console.log("当前设置为<不执行入会>，跳过");
           continue;
         }
         if (taskText.match(/8s/) && SkipTask == 1) {
@@ -709,7 +711,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
           continue;
         }
         if (taskText.match(/参与城城点击/) && IsChengCheng != 0) {
-          console.log("识别到城城任务，当前账号此任务火爆，即将进入下一任务");
+          console.log("城城任务当前账号活动火爆，跳过");
           continue;
         }
         taskButton = item;
@@ -723,7 +725,6 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
     }
 
     function timeTask() {
-      taskButton.click();
       sleep(1000);
       console.log("等待浏览任务完成……");
       if (textStartsWith("当前页").findOne(3000) != null) {//当前页浏览加购个商品领1000金币|当前页点击浏览个商品领1000金币
@@ -882,7 +883,6 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
     }
 
     function itemTask(cart) {
-      taskButton.click();
       sleep(1000);
       console.log("等待进入商品列表……");
       textStartsWith("当前页").waitFor();//当前页浏览加购 个商品领金币|当前页点击浏览 个商品领金币
@@ -969,14 +969,12 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       }
       console.log("浏览商品任务完成");
     }
-    console.log("当前任务：" + taskTitle)
-
+    console.log("当前任务：" + taskTitle);
+    console.log(taskText);
+    taskButton.click();
     if (taskText.match(/浏览.*s|浏览.*秒/)) {
-      console.log(taskText);
       timeTask();
     } else if (taskText.match(/参与城城点击/) && IsChengCheng == 0) {
-      console.log(taskText);
-      taskButton.click();
       sleep(2000);
       for (var ii = 0; !text("邀请新朋友 更快赚现金").exists(); ii++) {
         console.log("等待识别助力状态");
@@ -1031,8 +1029,6 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         }
       }
     } else if (taskText.match(/去APP/) && IsStartPage < 2) {
-      console.log(taskText);
-      taskButton.click();
       sleep(2000);
       /* 如果任务按钮为去完成，则此处应该有弹窗 */
       if (textContains("立即完成").exists()) {
@@ -1180,8 +1176,6 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
 
       }
     } else if (taskText.match(/首页二屏/) && IsStartPage_2 < 2) {
-      console.log(taskText);
-      taskButton.click();
       sleep(2000);
       /* 如果任务按钮为去完成，则此处应该有弹窗 */
       if (textContains("立即完成").exists()) {
@@ -1357,8 +1351,6 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
 
       }
     } else if (taskText.match(/品牌墙店铺/)) {
-      console.log(taskText);
-      taskButton.click();
       sleep(2000);
       if (taskText.match(/浏览5个/)) {
         var task2 = textContains("到底了，没有更多").findOne().parent().child(14).child(0)
@@ -1495,7 +1487,6 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         }
       }
     } else if (taskText.match(/累计浏览/)) {
-      console.log(taskText);
       if (taskText.match(/加购/)) {
         itemTask(true);
       }
@@ -1503,7 +1494,6 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         itemTask(false);
       }
     } else if (taskText.match(/浏览加购/)) {
-      console.log(taskText);
       if (taskText.match(/加购/)) {
         itemTask(true);
       }
@@ -1511,8 +1501,6 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         itemTask(false);
       }
     } else if (taskText.match(/去组队可得/)) {
-      console.log(taskText);
-      taskButton.click();
       sleep(3000);
       for (var ii = 0; !text("累计任务奖励").exists(); ii++) {
         sleep(1000);
@@ -1551,8 +1539,6 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         }
       }
     } else if (taskText.match(/小程序/)) {
-      console.log(taskText);
-      taskButton.click();
       sleep(3000);
       while (id("ffp").exists() | id("gv3").exists() | text("确定").exists()) {
         if (id("ffp").exists() | id("gv3").exists()) {
@@ -1573,8 +1559,6 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       }
       console.log("任务完成");
     } else if (taskText.match(/成功入会/)) {
-      console.log(taskText);
-      taskButton.click();
       sleep(4000);
       if (textContains("确认授权并加入店铺会员").exists()) {
         if (IsJoinMember == 2) {
@@ -1596,8 +1580,6 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         IsNotJoinMemberTimes = 0;
       }
     } else if (taskText.match(/预约并了解|玩AR游戏可得|打卡/)) {
-      console.log(taskText);
-      taskButton.click();
       sleep(2000);
       while (text("立即前往").exists() | text("立即签到").exists()) {
         if (text("立即前往").exists()) {
@@ -1622,9 +1604,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       }
       console.log("任务完成");
     } else if (taskText.match(/浏览并关注|预约并浏览|浏览可得|浏览即可得|逛会场可得|去手Q频道|去下游参加游戏/)) {
-      console.log(taskText);
       if (taskTitle.match(/去种草城/)) {
-        taskButton.click();
         sleep(5000);
         if (text("互动种草城").exists()) {
           if (textContains("/3）").exists()) {
@@ -1679,7 +1659,6 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
           }
         }
       } else {
-        taskButton.click();
         if (taskText.match(/去下游参加游戏/)) {
           sleep(800);
         }
@@ -1708,6 +1687,10 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
           GoShoppingTask = 1;
         }
       }
+      console.log("任务完成");
+    } else {
+      //默认当浏览任务做
+      sleep(2000);
       console.log("任务完成");
     }
 
