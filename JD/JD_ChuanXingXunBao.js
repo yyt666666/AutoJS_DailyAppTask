@@ -11,6 +11,8 @@
   修复打卡任务
   20221021 V1.3
   修改去完成点击方式
+  20221021 V1.4
+  修改品牌墙浏览界面异常判断
 
 */
 var TaskName = "穿行寻宝"
@@ -20,13 +22,13 @@ console.info("开始任务");
 //console.log("降低音量和亮度");
 sleep(2000);
 //备份亮度、声音设置
-// let OldBrightnessMode = device.getBrightnessMode()
-// let OldBrightness = device.getBrightness()
-// let OldMusicVolume = device.getMusicVolume()
+//let OldBrightnessMode = device.getBrightnessMode()
+//let OldBrightness = device.getBrightness()
+let OldMusicVolume = device.getMusicVolume()
 //调低亮度、声音
 //device.setBrightnessMode(0);
 //device.setBrightness(1);
-//device.setMusicVolume(0)
+device.setMusicVolume(0)
 
 
 /*
@@ -77,18 +79,20 @@ else {
   // Run("京东", 1, 1, 2); home();
   // Run("京东-2", 1, 1, 0); home();
   //手动例子
-  Run("手动", 1, 1, 2); home();
+  //Run("手动", 1, 1, 2); home();
+  //测试
+  Run("手动", 1, 0, 0); home();
   //分身有术缓存清理
   //CleanCache("分身有术Pro",1);
 }
 console.info("结束任务");
 
 
-// console.log("恢复音量和亮度");
-// //恢复亮度、音量设置
-// device.setBrightnessMode(OldBrightnessMode);
-// device.setBrightness(OldBrightness);
-// device.setMusicVolume(OldMusicVolume)
+//console.log("恢复音量和亮度");
+////恢复亮度、音量设置
+//device.setBrightnessMode(OldBrightnessMode);
+//device.setBrightness(OldBrightness);
+device.setMusicVolume(OldMusicVolume)
 
 console.log("已退出脚本");
 engines.myEngine().forceStop()
@@ -1359,8 +1363,8 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         for (var i = 0; i < 5; i++) {
           console.log("第" + (i + 1) + "个店铺");
           if (task2.childCount() < 14) {
-            console.error("界面异常，跳过任务");
-            break;
+            //界面异常，更换控件
+            task2 = textContains("到底了，没有更多").findOne().parent().child(15).child(0)
           }
           var task2DianPu = task2.child(i + 1)
           task2DianPu.click();
@@ -1384,6 +1388,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
             console.log("等待任务完成");
           }
         }
+        console.log("返回页面顶部");
         task2.click();//返回
         sleep(1000);
         console.info("打开任务列表");
