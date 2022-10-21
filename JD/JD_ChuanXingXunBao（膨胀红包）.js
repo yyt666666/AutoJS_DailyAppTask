@@ -4,7 +4,7 @@
   20221021 V1.0
   新增脚本
 */
-var TaskName = "穿行寻宝-签到助力"
+var TaskName = "穿行寻宝-膨胀助力"
 Start();
 console.info("开始任务");
 
