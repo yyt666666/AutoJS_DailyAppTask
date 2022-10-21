@@ -13,6 +13,8 @@
   修改去完成点击方式
   20221021 V1.4
   修改品牌墙浏览界面异常判断
+  20221021 V1.5
+  修改首页返回判断
 
 */
 var TaskName = "穿行寻宝"
@@ -1759,7 +1761,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         }
         if (text("累计任务奖励").exists()) break;
         console.info("准备下一个任务");
-        if (text("首页").exists()) {
+        if (text("首页").exists() && text("我的").exists()) {
           console.log("识别到首页，重进活动");
           if (!text("累计任务奖励").exists()) {
             if (!(textContains("消耗").exists())) {
