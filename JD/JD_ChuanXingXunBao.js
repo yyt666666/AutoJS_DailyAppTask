@@ -17,6 +17,8 @@
   修改首页返回判断
   20221021 V1.6
   新增默认浏览任务
+  20221022 V1.7
+  修复打卡关键字
 
 */
 var TaskName = "穿行寻宝"
@@ -655,7 +657,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       console.log("已连续" + IsNotJoinMemberTimes + "次为新店铺，跳过入会任务");
     }
     //let taskButtons = textMatches(/.*浏览.*s.*|.*浏览.*秒.*|.*首页二屏.*|.*去手Q频道.*|.*去下游参加游戏.*|.*累计浏览.*|.*浏览加购.*|.*预约并浏览.*|.*浏览即可得.*|.*浏览并关注.*|.*逛会场可得.*|.*浏览可得.*|.*预约并了解.*|.*成功入会.*|.*小程序.*|.*去组队可得.*|.*打卡可得.*|.*去APP.*|.*参与城城点击.*|.*品牌墙店铺.*|.*玩AR游戏可得.*金币.*/).find()
-    let taskButtons = textMatches(/去完成|去领取/).find()
+    let taskButtons = textMatches(/去完成|去领取|去打卡/).find()
     if (taskButtons.empty()) {
       console.log("未找到合适的任务，退出");
       sleep(3000);
