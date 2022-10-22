@@ -19,6 +19,7 @@
   新增默认浏览任务
   20221022 V1.7
   修复打卡关键字
+  修复首页返回判断
 
 */
 var TaskName = "穿行寻宝"
@@ -1747,7 +1748,9 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         if (text("累计任务奖励").exists()) break;
         console.info("准备下一个任务");
         if (text("首页").exists() && text("我的").exists()) {
-          console.log("识别到首页，重进活动");
+          console.log("识别到首页，返回原活动列表");
+          OutAPP();
+          sleep(1000);
           if (!text("累计任务奖励").exists()) {
             if (!(textContains("消耗").exists())) {
               for (var i = 0; !textContains("消耗").exists(); i++) {
