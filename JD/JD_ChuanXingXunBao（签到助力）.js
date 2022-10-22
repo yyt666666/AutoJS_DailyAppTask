@@ -8,6 +8,8 @@
   增加新的弹窗处理
   20221021 V1.2
   新增签到打卡任务参数控制
+  20221022 V1.3
+  修复打卡关键字
 
 */
 var TaskName = "穿行寻宝-签到助力"
@@ -58,9 +60,9 @@ if (files.exists("./账号明细.js")) {
 }
 else {
   // 京东例子
-  // Run("京东-3", 1, 1,1); home();
-  // Run("京东", 1, 1, 1); home();
-  // Run("京东-2", 1, 1, 1); home();
+  Run("京东-3", 1, 1,1); home();
+  Run("京东", 1, 1, 1); home();
+  Run("京东-2", 1, 1, 1); home();
   //手动例子
   Run("手动", 1, 1, 1); home();
   //分身有术缓存清理
@@ -570,13 +572,37 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
     }
   }
   if (textContains("开奖啦").exists()) {
+    console.info("已满级，跳过任务");
     return;
   }
-  if (IsSign == 1) {
-    console.log("已完成签到");
-    console.log("互动任务需要手动完成");
-  }
   else {
+    console.info("打开任务列表");
+    let taskListButton = textContains("消耗").findOne(10000)
+    if (!taskListButton) {
+      console.log("未能识别到关键节点，退出当前任务");
+      return;
+    }
+    taskListButton.parent().parent().parent().parent().child(3).click();
+    sleep(1000);
+    for (var i = 0; !text("累计任务奖励").exists(); i++) {
+      if (textContains("邀请好友助力").exists()) {
+        break;
+      }
+      console.log("未识别到任务列表，请手动打开")
+      sleep(3000);
+      if (i == 1) {
+        console.log("尝试坐标打开")
+        setScreenMetrics(1440, 3120);//基于分辨率1440*3120的点击
+        click(1260, 2598);
+        click(1260, 2598);
+        sleep(2000);
+        setScreenMetrics(device.width, device.height);//恢复本机分辨率
+      }
+      if (i >= 10) {
+        console.log("超时未打开任务列表，退出当前任务");
+        return;
+      }
+    }
     console.log("寻找未完成任务……");
     while (true) {
       if (textContains("去用券 享低价").exists()) {
@@ -585,7 +611,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
         sleep(1000);
       }
       //let taskButtons = textMatches(/.*浏览.*s.*|.*浏览.*秒.*|.*首页二屏.*|.*去手Q频道.*|.*去下游参加游戏.*|.*累计浏览.*|.*浏览加购.*|.*预约并浏览.*|.*浏览即可得.*|.*浏览并关注.*|.*逛会场可得.*|.*浏览可得.*|.*预约并了解.*|.*成功入会.*|.*小程序.*|.*去组队可得.*|.*打卡可得.*|.*去APP.*|.*参与城城点击.*|.*品牌墙店铺.*|.*玩AR游戏可得.*金币.*/).find()
-      let taskButtons = textMatches(/去完成|去领取/).find()
+      let taskButtons = textMatches(/去打卡/).find()
       if (taskButtons.empty()) {
         console.log("未找到合适的任务，退出");
         sleep(3000);
@@ -608,9 +634,13 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
 
         if (NotTaskQty) {// 如果数字相减不为0，证明没完成
           //跳过任务
-          if (!taskText.match(/打卡/)) continue
-          taskButton = item;
-          break;
+          if (taskText.match(/打卡/)){
+            taskButton = item;
+            break;
+          }
+          else{
+            continue;
+          }
         }
       }
       if (!taskButton) {
@@ -832,6 +862,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
       }
       sleep(2000);
     }
+
   }
 }
 function CleanCache(LauchAPPName, Isclean) {
