@@ -17,9 +17,12 @@
   增加已助力判断
   20220606 V1.5.1
   增加等待加载跳出的判断
+  20221031 V1.6
+  修改活动关键字
 
 */
 var TaskName = "京享红包"
+var TaskKey = "活动时间：2022.5.30-2022.6.18"//取抢字按钮页面上面的关键字，不同时间段需对应更改
 Start(TaskName);
 console.info("开始任务");
 
@@ -233,11 +236,11 @@ function Run(LauchAPPName,IsSeparation) {
       }
     }
     //setScreenMetrics(1440, 3120);//基于分辨率1440*3120的点击
-    while(text("立即查看").exists() |text("活动时间：2022.5.30-2022.6.18").exists()){
+    while(text("立即查看").exists() |text(TaskKey).exists()){
       if (text("立即查看").exists()){
         console.log("立即查看");
         text("立即查看").findOnce().click();
-        while(!text("活动时间：2022.5.30-2022.6.18").exists()){
+        while(!text(TaskKey).exists()){
           sleep(2000);
           console.log("等待加载……");
           if(textContains("活动太火爆了").exists()){
@@ -253,12 +256,12 @@ function Run(LauchAPPName,IsSeparation) {
             break;
           }
         }
-        if(text("活动时间：2022.5.30-2022.6.18").exists()){
-          //boundsX = text("活动时间：2022.5.30-2022.6.18").findOne().parent().parent().child(3).bounds().centerX();
-          //boundsY = text("活动时间：2022.5.30-2022.6.18").findOne().parent().parent().child(3).bounds().centerY();
+        if(text(TaskKey).exists()){
+          //boundsX = text(TaskKey).findOne().parent().parent().child(3).bounds().centerX();
+          //boundsY = text(TaskKey).findOne().parent().parent().child(3).bounds().centerY();
           console.log("开");
           //click(boundsX,boundsY);
-          click(text("活动时间：2022.5.30-2022.6.18").findOnce().parent().child(3).bounds().centerX(),text("活动时间：2022.5.30-2022.6.18").findOnce().parent().child(3).bounds().centerY())
+          click(text(TaskKey).findOnce().parent().child(3).bounds().centerX(),text(TaskKey).findOnce().parent().child(3).bounds().centerY())
           sleep(2000);
           /*
           if(text("恭喜获得").findOne(5000) != null){
@@ -273,13 +276,13 @@ function Run(LauchAPPName,IsSeparation) {
           }*/
           break;
         }
-      } else if(text("活动时间：2022.5.30-2022.6.18").exists()){
+      } else if(text(TaskKey).exists()){
         console.log("立即查看");
-        //boundsX = text("活动时间：2022.5.30-2022.6.18").findOne().parent().parent().child(3).bounds().centerX();
-        //boundsY = text("活动时间：2022.5.30-2022.6.18").findOne().parent().parent().child(3).bounds().centerY();
+        //boundsX = text(TaskKey).findOne().parent().parent().child(3).bounds().centerX();
+        //boundsY = text(TaskKey).findOne().parent().parent().child(3).bounds().centerY();
         console.log("开");
         //click(boundsX,boundsY);
-        click(text("活动时间：2022.5.30-2022.6.18").findOnce().parent().child(3).bounds().centerX(),text("活动时间：2022.5.30-2022.6.18").findOnce().parent().child(3).bounds().centerY())
+        click(text(TaskKey).findOnce().parent().child(3).bounds().centerX(),text(TaskKey).findOnce().parent().child(3).bounds().centerY())
         sleep(2000);
         /*
           if(text("恭喜获得").findOne(5000) != null){
