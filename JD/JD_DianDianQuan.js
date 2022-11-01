@@ -715,7 +715,7 @@ function Run(LauchAPPName, IsSeparation, IsLotteryDraw) {
             swipe((device.width / 3) * 2, (device.height / 6), (device.width / 3) * 2, (device.height / 6) * 3, 500);  //向下滑动，确保是在顶部位置
           }
           sleep(1000);
-          if (i > 3) {
+          if (i > 1) {
             Task_Log = Task_Log + "\n" + "签到未成功，当前账号可能已火爆，跳过当前账号,即将退出任务"
             console.error("签到未成功，当前账号可能已火爆，跳过当前账号")
             return;
@@ -854,7 +854,7 @@ function Run(LauchAPPName, IsSeparation, IsLotteryDraw) {
             swipe((device.width / 3) * 2, (device.height / 6), (device.width / 3) * 2, (device.height / 6) * 3, 500);  //向下滑动，确保是在顶部位置
           }
           sleep(1000);
-          if (i > 3) {
+          if (i > 1) {
             Task_Log = Task_Log + "\n" + "签到未成功，当前账号可能已火爆，跳过当前账号,即将退出任务"
             console.error("签到未成功，当前账号可能已火爆，跳过当前账号")
             return;
