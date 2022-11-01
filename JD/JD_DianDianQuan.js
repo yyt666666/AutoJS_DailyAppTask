@@ -58,6 +58,9 @@
   再次修改首页浏览任务完成标识
   20220927 V7.6
   新增立领200任务
+  20221101 V7.7
+  签到判断改为不成功的话跳过当前账号，不再尝试进入活动列表
+
 */
 var TaskName = "点点券"
 Start(TaskName);
@@ -713,8 +716,9 @@ function Run(LauchAPPName, IsSeparation, IsLotteryDraw) {
           }
           sleep(1000);
           if (i > 3) {
-            console.error("签到未成功，跳过")
-            break;
+            Task_Log = Task_Log + "\n" + "签到未成功，当前账号可能已火爆，跳过当前账号,即将退出任务"
+            console.error("签到未成功，当前账号可能已火爆，跳过当前账号")
+            return;
           }
         }
         if (className("android.view.View").desc("9.9下沉").exists() && IsLotteryDraw == 1) {
@@ -851,8 +855,9 @@ function Run(LauchAPPName, IsSeparation, IsLotteryDraw) {
           }
           sleep(1000);
           if (i > 3) {
-            console.error("签到未成功，跳过")
-            break;
+            Task_Log = Task_Log + "\n" + "签到未成功，当前账号可能已火爆，跳过当前账号,即将退出任务"
+            console.error("签到未成功，当前账号可能已火爆，跳过当前账号")
+            return;
           }
         }
         console.info("寻找点点券入口");
