@@ -60,6 +60,10 @@
   新增立领200任务
   20221101 V7.7
   签到判断改为不成功的话跳过当前账号，不再尝试进入活动列表
+  20221106 V7.8
+  新增浏览关注8s任务
+  修复收取点点券时提示次数错误问题
+  最后收取点点券时，增加返回页面顶部动作
 
 */
 var TaskName = "点点券"
@@ -218,6 +222,7 @@ function Run(LauchAPPName, IsSeparation, IsLotteryDraw) {
     //收点券
     console.info("待检测点点券可收取情况");
     sleep(500);
+    var t = 1
     while (text("待收取").exists() | text("领取任务").exists() | text("继续完成").exists()) {//增加2次弹出的任务关键字，避免提前跳出循环
       let Buttons = text("我的点点券").findOne(5000).parent().parent().parent().children()
       if (Buttons.empty()) {
@@ -225,13 +230,14 @@ function Run(LauchAPPName, IsSeparation, IsLotteryDraw) {
       }
       else {
         for (var i = 1; i < Buttons.length - 3; i++) {
-          if (i == 1) {
+          if (t == 1) {
             console.info("发现可收取点点券");
           }
           let Button = Buttons[i]
           ButtonText = Button.child(0).child(0).child(0).text()
           if (ButtonText.match(/[+][1-9].*/)) {
-            console.log("第" + i + "次收点点券");
+            console.log("第" + t + "次收点点券");
+            t++;
             //有2组任务的时候，多停留1秒
             if (textStartsWith("浏览2组").exists()) {
               Button.click();
@@ -255,12 +261,15 @@ function Run(LauchAPPName, IsSeparation, IsLotteryDraw) {
               console.info("发现任务");
               RunAllTask();
               console.info("继续收取");
+              sleep(1000);
             }
           }
           sleep(500);
         }
       }
       sleep(1500);
+      console.log("返回页面顶部");
+      swipe((device.width / 3) * 2 + random(20, 50), (device.height / 6) + random(20, 50), (device.width / 3) * 2 + random(20, 50), (device.height / 6) * 3 + random(20, 50), 500);  //从上往下滑动
     }
     console.info("点点券收取完毕");
     console.show();
@@ -311,6 +320,10 @@ function Run(LauchAPPName, IsSeparation, IsLotteryDraw) {
         else if (text("关注精选频道").exists() && (text("关注精选频道").findOnce().parent().child(3).text() == "领取任务"
           | text("关注精选频道").findOnce().parent().child(3).text() == "继续完成")) {
           RunTask(1, "关注精选频道", 1);
+        }
+        else if (textStartsWith("关注浏览8s").exists() && (textStartsWith("关注浏览8s").findOnce().parent().child(3).text() == "领取任务"
+          | textStartsWith("关注浏览8s").findOnce().parent().child(3).text() == "继续完成")) {
+          RunTask(1, "关注浏览8s", 2);
         }
         else if (textStartsWith("关注浏览10s").exists() && (textStartsWith("关注浏览10s").findOnce().parent().child(3).text() == "领取任务"
           | textStartsWith("关注浏览10s").findOnce().parent().child(3).text() == "继续完成")) {
@@ -493,11 +506,12 @@ function Run(LauchAPPName, IsSeparation, IsLotteryDraw) {
                 sleep(1000);
                 break;
               }
-            }
-            if (text("已完成浏览").exists()) {
-              console.log("任务完成，返回");
-              back();
-              sleep(1000);
+              if (text("已完成浏览").exists() | text("继续浏览").exists()) {
+                console.log("任务完成，返回");
+                back();
+                sleep(1000);
+                break;
+              }
             }
             for (var ii = 0; !textStartsWith(TaskKey).exists(); ii++) {
               console.log("返回异常，再次尝试返回");
@@ -581,11 +595,7 @@ function Run(LauchAPPName, IsSeparation, IsLotteryDraw) {
           if (i == 35) {
             console.log("等待任务完成标识");
           }
-          if (textStartsWith("任务完成").exists()) {
-            console.log("任务完成");
-            break;
-          }
-          if (text("已完成浏览").exists()) {
+          if (textStartsWith("任务完成").exists() | text("已完成浏览").exists() | text("继续浏览").exists()) {
             console.log("任务完成");
             break;
           }
@@ -594,7 +604,7 @@ function Run(LauchAPPName, IsSeparation, IsLotteryDraw) {
           textStartsWith("任务完成").findOne().parent().click();
           sleep(1000);
         }
-        else if (text("已完成浏览").exists()) {
+        else if (text("已完成浏览").exists() | text("继续浏览").exists()) {
           text("已完成浏览").findOne().parent().click();
           sleep(1000);
         }
