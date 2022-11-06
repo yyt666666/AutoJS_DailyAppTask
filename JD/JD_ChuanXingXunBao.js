@@ -20,6 +20,8 @@
   20221022 V1.7
   修复打卡关键字
   修复首页返回判断
+  20221106 V1.8
+  增加签到弹窗判断
 
 */
 var TaskName = "穿行寻宝"
@@ -535,7 +537,12 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         console.log("开心收下");
         click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
         sleep(1000);
-        textContains("明天继续").waitFor();
+        while (true) {
+          sleep(1000)
+          if (textContains("明天继续").exists() | textContains("明天开启下一轮").exists()) {
+            break;
+          }
+        }
         console.log("明天继续");
         textContains("每天签到领福利").findOne().parent().child(1).click();
         IsSign = 1
@@ -570,11 +577,15 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
           sleep(1000);
         }
       }
-      if (textContains("明天继续").exists()) {
-        console.log("明天继续");
-        textContains("每天签到领福利").findOne().parent().child(1).click();
-        sleep(1000);
+      while (true) {
+        sleep(1000)
+        if (textContains("明天继续").exists() | textContains("明天开启下一轮").exists()) {
+          break;
+        }
       }
+      console.log("明天继续");
+      textContains("每天签到领福利").findOne().parent().child(1).click();
+      sleep(1000);
       if (textContains("取消").exists()) {
         textContains("取消").findOne().click();
         sleep(1000);
@@ -1118,7 +1129,12 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
             console.log("开心收下");
             click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
             sleep(1000);
-            textContains("明天继续").waitFor();
+            while (true) {
+              sleep(1000)
+              if (textContains("明天继续").exists() | textContains("明天开启下一轮").exists()) {
+                break;
+              }
+            }
             console.log("明天继续");
             textContains("每天签到领福利").findOne().parent().child(1).click()
             IsSign = 1
@@ -1291,7 +1307,12 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
             console.log("开心收下");
             click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
             sleep(1000);
-            textContains("明天继续").waitFor();
+            while (true) {
+              sleep(1000)
+              if (textContains("明天继续").exists() | textContains("明天开启下一轮").exists()) {
+                break;
+              }
+            }
             console.log("明天继续");
             textContains("每天签到领福利").findOne().parent().child(1).click()
             IsSign = 1
@@ -1819,7 +1840,12 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
                 console.log("开心收下");
                 click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
                 sleep(1000);
-                textContains("明天继续").waitFor();
+                while (true) {
+                  sleep(1000)
+                  if (textContains("明天继续").exists() | textContains("明天开启下一轮").exists()) {
+                    break;
+                  }
+                }
                 console.log("明天继续");
                 textContains("每天签到领福利").findOne().parent().child(1).click()
                 IsSign = 1
