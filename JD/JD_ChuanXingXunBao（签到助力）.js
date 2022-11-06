@@ -10,6 +10,8 @@
   新增签到打卡任务参数控制
   20221022 V1.3
   修复打卡关键字
+  20221106 V1.4
+  增加签到弹窗判断
 
 */
 var TaskName = "穿行寻宝-签到助力"
@@ -60,7 +62,7 @@ if (files.exists("./账号明细.js")) {
 }
 else {
   // 京东例子
-  Run("京东-3", 1, 1,1); home();
+  Run("京东-3", 1, 1, 1); home();
   Run("京东", 1, 1, 1); home();
   Run("京东-2", 1, 1, 1); home();
   //手动例子
@@ -504,7 +506,12 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
         console.log("开心收下");
         click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
         sleep(1000);
-        textContains("明天继续").waitFor();
+        while (true) {
+          sleep(1000)
+          if (textContains("明天继续").exists() | textContains("明天开启下一轮").exists()) {
+            break;
+          }
+        }
         console.log("明天继续");
         textContains("每天签到领福利").findOne().parent().child(1).click();
         IsSign = 1
@@ -539,11 +546,15 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
           sleep(1000);
         }
       }
-      if (textContains("明天继续").exists()) {
-        console.log("明天继续");
-        textContains("每天签到领福利").findOne().parent().child(1).click();
-        sleep(1000);
+      while (true) {
+        sleep(1000)
+        if (textContains("明天继续").exists() | textContains("明天开启下一轮").exists()) {
+          break;
+        }
       }
+      console.log("明天继续");
+      textContains("每天签到领福利").findOne().parent().child(1).click();
+      sleep(1000);
       if (textContains("取消").exists()) {
         textContains("取消").findOne().click();
         sleep(1000);
@@ -634,11 +645,11 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
 
         if (NotTaskQty) {// 如果数字相减不为0，证明没完成
           //跳过任务
-          if (taskText.match(/打卡/)){
+          if (taskText.match(/打卡/)) {
             taskButton = item;
             break;
           }
-          else{
+          else {
             continue;
           }
         }
@@ -799,7 +810,12 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
                   console.log("开心收下");
                   click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
                   sleep(1000);
-                  textContains("明天继续").waitFor();
+                  while (true) {
+                    sleep(1000)
+                    if (textContains("明天继续").exists() | textContains("明天开启下一轮").exists()) {
+                      break;
+                    }
+                  }
                   console.log("明天继续");
                   textContains("每天签到领福利").findOne().parent().child(1).click()
                   IsSign = 1
