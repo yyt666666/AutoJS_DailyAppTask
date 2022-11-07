@@ -62,9 +62,9 @@ if (files.exists("./账号明细.js")) {
 }
 else {
   // 京东例子
-  Run("京东-3", 1, 1, 1); home();
-  Run("京东", 1, 1, 1); home();
-  Run("京东-2", 1, 1, 1); home();
+  // Run("京东-3", 1, 1, 1); home();
+  // Run("京东", 1, 1, 1); home();
+  // Run("京东-2", 1, 1, 1); home();
   //手动例子
   Run("手动", 1, 1, 1); home();
   //分身有术缓存清理
@@ -506,7 +506,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
         console.log("开心收下");
         click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
         sleep(1000);
-        while (true) {
+        for (var i = 0; i < 10; i++) {
           sleep(1000)
           if (textContains("明天继续").exists() | textContains("明天开启下一轮").exists()) {
             break;
@@ -546,7 +546,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
           sleep(1000);
         }
       }
-      while (true) {
+      for (var i = 0; i < 10; i++) {
         sleep(1000)
         if (textContains("明天继续").exists() | textContains("明天开启下一轮").exists()) {
           break;
@@ -810,7 +810,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
                   console.log("开心收下");
                   click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
                   sleep(1000);
-                  while (true) {
+                  for (var i = 0; i < 10; i++) {
                     sleep(1000)
                     if (textContains("明天继续").exists() | textContains("明天开启下一轮").exists()) {
                       break;
