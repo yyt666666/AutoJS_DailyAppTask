@@ -537,7 +537,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         console.log("开心收下");
         click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
         sleep(1000);
-        while (true) {
+        for (var i = 0; i < 10; i++) {
           sleep(1000)
           if (textContains("明天继续").exists() | textContains("明天开启下一轮").exists()) {
             break;
@@ -577,7 +577,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
           sleep(1000);
         }
       }
-      while (true) {
+      for (var i = 0; i < 10; i++) {
         sleep(1000)
         if (textContains("明天继续").exists() | textContains("明天开启下一轮").exists()) {
           break;
@@ -1129,7 +1129,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
             console.log("开心收下");
             click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
             sleep(1000);
-            while (true) {
+            for (var i = 0; i < 10; i++) {
               sleep(1000)
               if (textContains("明天继续").exists() | textContains("明天开启下一轮").exists()) {
                 break;
@@ -1307,7 +1307,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
             console.log("开心收下");
             click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
             sleep(1000);
-            while (true) {
+            for (var i = 0; i < 10; i++) {
               sleep(1000)
               if (textContains("明天继续").exists() | textContains("明天开启下一轮").exists()) {
                 break;
@@ -1840,7 +1840,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
                 console.log("开心收下");
                 click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
                 sleep(1000);
-                while (true) {
+                for (var i = 0; i < 10; i++) {
                   sleep(1000)
                   if (textContains("明天继续").exists() | textContains("明天开启下一轮").exists()) {
                     break;
