@@ -4,6 +4,9 @@
 
   20221226 V1.0
   新增脚本
+  20221227 V1.1
+  修改签到任务逻辑
+  修改早起打卡任务
 */
 var TaskName = "全民炸年兽"
 Start(TaskName);
@@ -472,7 +475,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
     sleep(2000);
     console.log("成功进入活动界面");
     let IsSign = 0
-    signTask(IsSign);
+    //signTask(IsSign);
     console.log("等待加载弹窗……");
     while (textContains("继续环游").exists() | textContains("立即抽奖").exists() | textContains("开启今日抽奖").exists() | textContains("点我签到").exists() | textContains("开心收下").exists() | textContains("立即签到").exists()) {
       if (textContains("开心收下").exists()) {
@@ -520,34 +523,45 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
         sleep(1000);
         IsSign = 1
-      }
-      if (text("每天签到领爆竹大额红包").exists()) {
-        text("每天签到领爆竹大额红包").findOne().parent().child(1).click();
-        console.log("关闭签到页面");
+        console.log("已完成签到");
+        textContains("您已累计签到").findOne().parent().parent().parent().parent().parent().child(0).click();
       }
       sleep(1000);
       console.log("如还有弹窗，请手动处理");
       sleep(3000);
     }
-    if (textContains("20站").exists() && IsSign == 0) {
+    if (textContains("/20站").exists() && IsSign == 0) {
       console.log("前往签到");
-      textContains("20站").findOne().parent().parent().parent().child(10).click();
+      let sign = textContains("/20站").findOnce().parent().parent().parent().child(10)
+      sign.click();
       sleep(2500);
-      if (textContains("立即签到").exists()) {
-        console.log("立即签到");
-        click(textContains("立即签到").findOne().bounds().centerX(), textContains("立即签到").findOne().bounds().centerY())
-        sleep(1000);
-        textContains("开心收下").waitFor();
-        click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
-        sleep(1000);
-      }
+      // if (textContains("立即签到").exists()) {
+      //   console.log("立即签到");
+      //   click(textContains("立即签到").findOne().bounds().centerX(), textContains("立即签到").findOne().bounds().centerY())
+      //   sleep(1000);
+      //   textContains("开心收下").waitFor();
+      //   click(textContains("开心收下").findOne().bounds().centerX(), textContains("开心收下").findOne().bounds().centerY())
+      //   sleep(1000);
+      // }
       // if (textContains("明日再来").exists()) {
       //   console.log("明日再来");
       //   textContains("您已累计签到").findOne().parent().parent().parent().parent().parent().child(0).click();
       //   sleep(1000);
       // }
-      console.log("已完成签到");
-      textContains("您已累计签到").findOne().parent().parent().parent().parent().parent().child(0).click();
+      console.log("立即签到");
+      setScreenMetrics(1440, 3120);//基于分辨率1440*3120的点击
+      click(720, 2798);
+      sleep(2000);
+      setScreenMetrics(device.width, device.height);//恢复本机分辨率
+      //textContains("签到成功").waitFor();
+      if (textContains("签到成功").exists()) {
+        console.log("签到成功");
+        textContains("签到成功").findOnce().parent().child(1).click();
+        sleep(1000);
+      }
+      sleep(1000);
+      console.log("关闭签到页面");
+      textContains("您已累计签到").findOnce().parent().parent().parent().parent().parent().child(0).click();
     }
     if (text("点击领取").exists()) {
       console.log("爆竹已存满");
@@ -611,7 +625,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       IsJoinMember = 0
       console.log("已连续" + IsNotJoinMemberTimes + "次为新店铺，跳过入会任务");
     }
-    let taskButtons = textMatches(/.*浏览.*s.*|.*浏览.*秒.*|.*首页二屏.*|.*去手Q频道.*|.*去下游参加游戏.*|.*累计浏览.*|.*浏览加购.*|.*预约并浏览.*|.*浏览即可得.*|.*浏览并关注.*|.*逛会场可得.*|.*浏览可得.*|.*预约并了解.*|.*成功入会.*|.*小程序.*|.*去组队可得.*|.*每日6-9点打卡可得.*|.*去APP.*|.*参与城城点击.*|.*品牌墙店铺.*|.*玩AR游戏可得.*爆竹.*/).find()
+    let taskButtons = textMatches(/.*浏览.*s.*|.*浏览.*秒.*|.*首页二屏.*|.*去手Q频道.*|.*去下游参加游戏.*|.*累计浏览.*|.*浏览加购.*|.*预约并浏览.*|.*浏览即可得.*|.*浏览并关注.*|.*逛会场可得.*|.*浏览可得.*|.*预约并了解.*|.*成功入会.*|.*小程序.*|.*去组队可得.*|.*打卡可得.*|.*去APP.*|.*参与城城点击.*|.*品牌墙店铺.*|.*玩AR游戏可得.*爆竹.*/).find()
     if (taskButtons.empty()) {
       console.log("未找到合适的任务，退出");
       sleep(3000);
@@ -1489,7 +1503,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         console.log("任务完成");
         IsNotJoinMemberTimes = 0;
       }
-    } else if (taskText.match(/预约并了解|玩AR游戏可得|每日6-9点打卡/)) {
+    } else if (taskText.match(/预约并了解|玩AR游戏可得|打卡可得/)) {
       console.log(taskText);
       taskButton.click();
       sleep(2000);
