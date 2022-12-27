@@ -380,13 +380,13 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
                 console.log("未识别到活动页面，尝试通过我的进入");
                 if (desc("我的").exists()) {
                   desc("我的").findOne().click();
-                  let into = text("全民炸年兽").findOne(20000);
+                  let into = text("炸年兽").findOne(20000);
                   sleep(2000);
                   if (into == null) {
                     console.log("无法找到京东活动入口，退出当前任务");
                     return;
                   }
-                  text("全民炸年兽").findOne().parent().parent().click();
+                  text("炸年兽").findOne().parent().parent().click();
                   sleep(3000);
                 }
                 if ((textContains("消耗").exists()) | textContains("开奖啦").exists()) {
@@ -439,13 +439,13 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         console.log("未识别到活动页面，尝试通过我的进入");
         if (desc("我的").exists()) {
           desc("我的").findOne().click();
-          let into = text("全民炸年兽").findOne(20000);
+          let into = text("炸年兽").findOne(20000);
           sleep(2000);
           if (into == null) {
             console.log("无法找到京东活动入口，退出当前任务");
             return;
           }
-          text("全民炸年兽").findOne().parent().parent().click();
+          text("炸年兽").findOne().parent().parent().click();
           sleep(3000);
         }
         if ((textContains("消耗").exists()) | textContains("开奖啦").exists()) {
@@ -1020,13 +1020,13 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
             console.log("未识别到活动页面，尝试通过我的进入");
             if (desc("我的").exists()) {
               desc("我的").findOne().click();
-              let into = text("全民炸年兽").findOne(20000);
+              let into = text("炸年兽").findOne(20000);
               sleep(2000);
               if (into == null) {
                 console.log("无法找到京东活动入口，退出当前任务");
                 return;
               }
-              text("全民炸年兽").findOne().parent().parent().click();
+              text("炸年兽").findOne().parent().parent().click();
               sleep(3000);
             }
             if ((textContains("消耗").exists()) | textContains("开奖啦").exists()) {
@@ -1154,13 +1154,13 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
                 console.log("超时未找到首页入口，通过我的入口返回，并跳过此任务");
                 if (desc("我的").exists()) {
                   desc("我的").findOne().click();
-                  let into = text("全民炸年兽").findOne(20000);
+                  let into = text("炸年兽").findOne(20000);
                   sleep(2000);
                   if (into == null) {
                     console.log("无法找到京东活动入口，退出当前任务");
                     return;
                   }
-                  text("全民炸年兽").findOne().parent().parent().click();
+                  text("炸年兽").findOne().parent().parent().click();
                   sleep(3000);
                 }
                 IsStartPage_2 = 3;
@@ -1348,13 +1348,13 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
               console.log("未识别到活动页面，尝试通过我的进入");
               if (desc("我的").exists()) {
                 desc("我的").findOne().click();
-                let into = text("全民炸年兽").findOne(20000);
+                let into = text("炸年兽").findOne(20000);
                 sleep(2000);
                 if (into == null) {
                   console.log("无法找到京东活动入口，退出当前任务");
                   return;
                 }
-                text("全民炸年兽").findOne().parent().parent().click();
+                text("炸年兽").findOne().parent().parent().click();
                 sleep(3000);
               }
               if ((textContains("消耗").exists()) | textContains("开奖啦").exists()) {
@@ -1677,13 +1677,13 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
                 console.log("未识别到活动页面，尝试通过我的进入");
                 if (desc("我的").exists()) {
                   desc("我的").findOne().click();
-                  let into = text("全民炸年兽").findOne(20000);
+                  let into = text("炸年兽").findOne(20000);
                   sleep(2000);
                   if (into == null) {
                     console.log("无法找到京东活动入口，退出当前任务");
                     return;
                   }
-                  text("全民炸年兽").findOne().parent().parent().click();
+                  text("炸年兽").findOne().parent().parent().click();
                   sleep(3000);
                 }
                 if ((textContains("消耗").exists()) | textContains("开奖啦").exists()) {
@@ -1746,13 +1746,13 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
                 console.log("未识别到活动页面，尝试通过我的进入");
                 if (desc("我的").exists()) {
                   desc("我的").findOne().click();
-                  let into = text("全民炸年兽").findOne(20000);
+                  let into = text("炸年兽").findOne(20000);
                   sleep(2000);
                   if (into == null) {
                     console.log("无法找到京东活动入口，退出当前任务");
                     return;
                   }
-                  text("全民炸年兽").findOne().parent().parent().click();
+                  text("炸年兽").findOne().parent().parent().click();
                   sleep(3000);
                 }
                 if ((textContains("消耗").exists()) | textContains("开奖啦").exists()) {
