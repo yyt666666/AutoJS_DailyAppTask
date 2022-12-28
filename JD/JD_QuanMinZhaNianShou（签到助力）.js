@@ -6,6 +6,8 @@
   20221227 V1.1
   修改签到任务逻辑
   修改早起打卡任务
+  20221228 V1.2
+  修改签到任务逻辑
 */
 let TaskName = "全民炸年兽-签到助力"
 Start(TaskName);
@@ -510,8 +512,10 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
     }
     if (textContains("/20站").exists() && IsSign == 0) {
       console.log("前往签到");
-      let sign = textContains("/20站").findOnce().parent().parent().parent().child(10)
-      sign.click();
+      let sign1 = textContains("/20站").findOnce().parent().parent().parent().child(10)
+          sign2 = textContains("/20站").findOnce().parent().parent().parent().child(11)
+      sign1.click();
+      sign2.click();
       sleep(2500);
       // if (textContains("立即签到").exists()) {
       //   console.log("立即签到");
