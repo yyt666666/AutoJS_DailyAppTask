@@ -7,6 +7,8 @@
   20221227 V1.1
   修改签到任务逻辑
   修改早起打卡任务
+  20221228 V1.2
+  修改签到任务逻辑
 */
 var TaskName = "全民炸年兽"
 Start(TaskName);
@@ -532,8 +534,10 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
     }
     if (textContains("/20站").exists() && IsSign == 0) {
       console.log("前往签到");
-      let sign = textContains("/20站").findOnce().parent().parent().parent().child(10)
-      sign.click();
+      let sign1 = textContains("/20站").findOnce().parent().parent().parent().child(10)
+          sign2 = textContains("/20站").findOnce().parent().parent().parent().child(11)
+      sign1.click();
+      sign2.click();
       sleep(2500);
       // if (textContains("立即签到").exists()) {
       //   console.log("立即签到");
@@ -625,7 +629,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       IsJoinMember = 0
       console.log("已连续" + IsNotJoinMemberTimes + "次为新店铺，跳过入会任务");
     }
-    let taskButtons = textMatches(/.*浏览.*s.*|.*浏览.*秒.*|.*首页二屏.*|.*去手Q频道.*|.*去下游参加游戏.*|.*累计浏览.*|.*浏览加购.*|.*预约并浏览.*|.*浏览即可得.*|.*浏览并关注.*|.*逛会场可得.*|.*浏览可得.*|.*预约并了解.*|.*成功入会.*|.*小程序.*|.*去组队可得.*|.*打卡可得.*|.*去APP.*|.*参与城城点击.*|.*品牌墙店铺.*|.*玩AR游戏可得.*爆竹.*/).find()
+    let taskButtons = textMatches(/.*浏览.*s.*|.*浏览.*秒.*|.*首页二屏.*|.*去手Q频道.*|.*去下游参加游戏.*|.*累计浏览.*|.*浏览加购.*|.*预约并浏览.*|.*浏览可获得.*|.*浏览即可得.*|.*浏览并关注.*|.*逛会场可得.*|.*浏览可得.*|.*预约并了解.*|.*成功入会.*|.*小程序.*|.*去组队可得.*|.*打卡可得.*|.*去APP.*|.*参与城城点击.*|.*品牌墙店铺.*|.*玩AR游戏可得.*爆竹.*/).find()
     if (taskButtons.empty()) {
       console.log("未找到合适的任务，退出");
       sleep(3000);
@@ -1529,7 +1533,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         }
       }
       console.log("任务完成");
-    } else if (taskText.match(/浏览并关注|预约并浏览|浏览可得|浏览即可得|逛会场可得|去手Q频道|去下游参加游戏/)) {
+    } else if (taskText.match(/浏览并关注|预约并浏览|浏览可得|浏览可获得|浏览即可得|逛会场可得|去手Q频道|去下游参加游戏/)) {
       console.log(taskText);
       if (taskTitle.match(/去种草城/)) {
         taskButton.click();
