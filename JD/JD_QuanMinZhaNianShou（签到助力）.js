@@ -530,6 +530,10 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
       //   textContains("您已累计签到").findOne().parent().parent().parent().parent().parent().child(0).click();
       //   sleep(1000);
       // }
+      if(textContains("提醒我每天签到").findOne(3000) == null){
+        back();
+        sleep(1500);
+      }
       console.log("立即签到");
       setScreenMetrics(1440, 3120);//基于分辨率1440*3120的点击
       click(720, 2798);
