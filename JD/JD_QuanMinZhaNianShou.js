@@ -537,7 +537,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
     if (textContains("/20站").exists() && IsSign == 0) {
       console.log("前往签到");
       let sign1 = textContains("/20站").findOnce().parent().parent().parent().child(10)
-          sign2 = textContains("/20站").findOnce().parent().parent().parent().child(11)
+      sign2 = textContains("/20站").findOnce().parent().parent().parent().child(11)
       sign1.click();
       sign2.click();
       sleep(2500);
@@ -554,7 +554,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       //   textContains("您已累计签到").findOne().parent().parent().parent().parent().parent().child(0).click();
       //   sleep(1000);
       // }
-      if(textContains("提醒我每天签到").findOne(3000) == null){
+      if (textContains("提醒我每天签到").findOne(3000) == null) {
         back();
         sleep(1500);
       }
@@ -600,6 +600,10 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       for (var i = 0; !text("累计任务奖励").exists(); i++) {
         if (textContains("邀请好友助力").exists()) {
           break;
+        }
+        if (textContains("-红包明细-").exists()) {
+          back();
+          sleep(1000);
         }
         console.log("未识别到任务列表，请手动打开")
         sleep(3000);
@@ -852,6 +856,13 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         }
         else {
           console.log("浏览时长任务完成");
+        }
+        if (taskTitle.match(/品牌墙/)) {
+          if (!text("累计任务奖励").exists() && (textContains("消耗").exists())) {
+            console.log("未识别到任务列表，尝试自动打开");
+            taskListButton.parent().parent().child(5).child(1).click();
+            sleep(1000);
+          }
         }
       }
     }
@@ -1107,6 +1118,10 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
           sleep(1000);
         }
         for (var i = 0; !text("累计任务奖励").exists(); i++) {
+          if (textContains("-红包明细-").exists()) {
+            back();
+            sleep(1000);
+          }
           console.log("未识别到任务列表，请手动打开")
           sleep(3000);
           if (i == 1) {
@@ -1259,6 +1274,10 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
           sleep(1000);
         }
         for (var i = 0; !text("累计任务奖励").exists(); i++) {
+          if (textContains("-红包明细-").exists()) {
+            back();
+            sleep(1000);
+          }
           console.log("未识别到任务列表，请手动打开")
           sleep(3000);
           if (i == 1) {
@@ -1325,6 +1344,10 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         sleep(1000);
 
         for (var i = 0; !text("累计任务奖励").exists(); i++) {
+          if (textContains("-红包明细-").exists()) {
+            back();
+            sleep(1000);
+          }
           console.log("未识别到任务列表，请手动打开")
           sleep(3000);
           if (i == 1) {
@@ -1395,6 +1418,10 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
           sleep(1000);
 
           for (var i = 0; !text("累计任务奖励").exists(); i++) {
+            if (textContains("-红包明细-").exists()) {
+              back();
+              sleep(1000);
+            }
             console.log("未识别到任务列表，请手动打开")
             sleep(3000);
             if (i == 1) {
@@ -1630,9 +1657,15 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
     }
 
     for (var i = 0; !text("累计任务奖励").exists(); i++) {
-      console.log("返回");
-      back();
-      sleep(1000);
+      if (!text("累计任务奖励").exists() && textContains("消耗").exists()) {
+        let taskListButton = textContains("消耗").findOne(10000)
+        if (!taskListButton) {
+          console.log("未能识别关键节点，退出当前任务");
+          return;
+        }
+        taskListButton.parent().parent().child(5).child(1).click();
+        sleep(1000);
+      }
       if (i == 10) {
         console.log("无法返回任务界面，退出当前任务");
         return;
@@ -1640,6 +1673,9 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       if (text("累计任务奖励").findOnce(2000) != null) {
         break;
       }
+      console.log("返回");
+      back();
+      sleep(1000);
       if (text("暂时离开").exists()) {
         console.log("暂时离开");
         click(textContains("暂时离开").findOne().bounds().centerX(), textContains("暂时离开").findOne().bounds().centerY())
@@ -1678,145 +1714,6 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
           sleep(1000);
         }
         if (text("累计任务奖励").exists()) break;
-        if (text("健康研究室").exists() && textContains("活动太火爆了").exists()) {
-          console.log("健康研究室任务火爆，返回首页重进活动，跳过此任务");
-          text("去逛逛").findOne().click();
-          if (!text("累计任务奖励").exists()) {
-            if ((!textContains("消耗").exists())) {
-              for (var i = 0; !textContains("消耗").exists(); i++) {
-                console.log("未识别到活动页面，尝试通过我的进入");
-                if (desc("我的").exists()) {
-                  desc("我的").findOne().click();
-                  let into = text("炸年兽").findOne(20000);
-                  sleep(2000);
-                  if (into == null) {
-                    console.log("无法找到京东活动入口，退出当前任务");
-                    return;
-                  }
-                  text("炸年兽").findOne().parent().parent().click();
-                  sleep(3000);
-                }
-                if ((textContains("消耗").exists()) | textContains("开奖啦").exists()) {
-                  break;
-                }
-                if (i > 10) {
-                  console.log("识别超时，退出当前任务");
-                  return;
-                }
-                sleep(3000);
-              }
-              if ((textContains("消耗").exists())) {
-                console.log("已检测到活动页面");
-                PageStatus = 1//进入活动页面，未打开任务列表
-              }
-            }
-            else {
-              console.log("检测到活动页面");
-              PageStatus = 1//进入活动页面，未打开任务列表
-            }
-            console.info("打开任务列表");
-            let taskListButton = textContains("消耗").findOne(10000)
-            if (!taskListButton) {
-              console.log("未能识别关键节点，退出当前任务");
-              return;
-            }
-            taskListButton.parent().parent().child(5).child(1).click();
-            sleep(1000);
-
-            for (var i = 0; !text("累计任务奖励").exists(); i++) {
-              console.log("未识别到任务列表，请手动打开")
-              sleep(3000);
-              if (i == 1) {
-                console.log("尝试坐标打开")
-                setScreenMetrics(1440, 3120);//基于分辨率1440*3120的点击
-                click(1276, 1992);
-                click(1276, 1992);
-                sleep(2000);
-                setScreenMetrics(device.width, device.height);//恢复本机分辨率
-              }
-              if (i >= 10) {
-                console.log("未按时打开任务列表，退出当前任务");
-                return;
-              }
-            }
-          }
-          SkipSmallTask = 1
-        }
-        if ((text("领京豆").exists() && text("首页").exists()) | (app.getAppName(currentPackage()) == "京东" && text("首页").exists())) {
-          console.log("发现首页，尝试退出并返回原任务列表");
-          OutAPP(100);
-          sleep(2000);
-          if (text("累计任务奖励").exists()) {
-            console.log("已返回任务列表");
-            break;
-          }
-          if (!text("累计任务奖励").exists()) {
-            if ((!textContains("消耗").exists())) {
-              for (var i = 0; !textContains("消耗").exists(); i++) {
-                console.log("未识别到活动页面，尝试通过我的进入");
-                if (desc("我的").exists()) {
-                  desc("我的").findOne().click();
-                  let into = text("炸年兽").findOne(20000);
-                  sleep(2000);
-                  if (into == null) {
-                    console.log("无法找到京东活动入口，退出当前任务");
-                    return;
-                  }
-                  text("炸年兽").findOne().parent().parent().click();
-                  sleep(3000);
-                }
-                if ((textContains("消耗").exists()) | textContains("开奖啦").exists()) {
-                  break;
-                }
-                if (i > 10) {
-                  console.log("识别超时，退出当前任务");
-                  return;
-                }
-                sleep(3000);
-              }
-              if ((textContains("消耗").exists())) {
-                console.log("已检测到活动页面");
-                PageStatus = 1//进入活动页面，未打开任务列表
-              }
-            }
-            else {
-              console.log("检测到活动页面");
-              PageStatus = 1//进入活动页面，未打开任务列表
-            }
-            console.info("打开任务列表");
-            let taskListButton = textContains("消耗").findOne(10000)
-            if (!taskListButton) {
-              console.log("未能识别关键节点，退出当前任务");
-              return;
-            }
-            taskListButton.parent().parent().child(5).child(1).click();
-            sleep(1000);
-
-            for (var i = 0; !text("累计任务奖励").exists(); i++) {
-              console.log("未识别到任务列表，请手动打开")
-              sleep(3000);
-              if (i == 1) {
-                console.log("尝试坐标打开")
-                setScreenMetrics(1440, 3120);//基于分辨率1440*3120的点击
-                click(1276, 1992);
-                click(1276, 1992);
-                sleep(2000);
-                setScreenMetrics(device.width, device.height);//恢复本机分辨率
-              }
-              if (i >= 10) {
-                console.log("未按时打开任务列表，退出当前任务");
-                return;
-              }
-            }
-          }
-          if (i > 1 && text("首页").exists() && desc("新品").exists()) {
-            console.log("首页异常，尝试刷新");
-            desc("新品").findOne().click();
-            sleep(500);
-            desc("首页").findOne().click();
-            sleep(1500);
-          }
-        }
       }
     }
     console.info("准备下一个任务");
