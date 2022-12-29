@@ -579,6 +579,10 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
         if (textContains("邀请好友助力").exists()) {
           break;
         }
+        if (textContains("-红包明细-").exists()) {
+          back();
+          sleep(1000);
+        }
         console.log("未识别到任务列表，请手动打开")
         sleep(3000);
         if (i == 1) {
@@ -732,6 +736,10 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
               sleep(1000);
 
               for (var i = 0; !text("累计任务奖励").exists(); i++) {
+                if (textContains("-红包明细-").exists()) {
+                  back();
+                  sleep(1000);
+                }
                 console.log("未识别到任务列表，请手动打开")
                 sleep(3000);
                 if (i == 1) {
@@ -801,6 +809,10 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
               sleep(1000);
 
               for (var i = 0; !text("累计任务奖励").exists(); i++) {
+                if (textContains("-红包明细-").exists()) {
+                  back();
+                  sleep(1000);
+                }
                 console.log("未识别到任务列表，请手动打开")
                 sleep(3000);
                 if (i == 1) {
