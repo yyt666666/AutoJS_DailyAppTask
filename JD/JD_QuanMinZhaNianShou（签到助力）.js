@@ -8,6 +8,8 @@
   修改早起打卡任务
   20221228 V1.2
   修改签到任务逻辑
+  20221229 V1.3
+  修改任务列表入口按钮
 */
 let TaskName = "全民炸年兽-签到助力"
 Start(TaskName);
@@ -726,7 +728,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
                 console.log("未能识别关键节点，退出当前任务");
                 return;
               }
-              taskListButton.parent().parent().child(6).child(1).click();
+              taskListButton.parent().parent().child(5).child(1).click();
               sleep(1000);
 
               for (var i = 0; !text("累计任务奖励").exists(); i++) {
@@ -795,7 +797,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, ToDoTask) {
                 console.log("未能识别关键节点，退出当前任务");
                 return;
               }
-              taskListButton.parent().parent().child(6).child(1).click();
+              taskListButton.parent().parent().child(5).child(1).click();
               sleep(1000);
 
               for (var i = 0; !text("累计任务奖励").exists(); i++) {
