@@ -19,10 +19,11 @@
   增加等待加载跳出的判断
   20221031 V1.6
   修改活动关键字
-
+  20221230 V1.7
+  修改活动关键字
 */
 var TaskName = "京享红包"
-var TaskKey = "活动时间：2022.5.30-2022.6.18"//取抢字按钮页面上面的关键字，不同时间段需对应更改
+var TaskKey = "活动时间：2022.12.29-2023.1.15"//取抢字按钮页面上面的关键字，不同时间段需对应更改
 Start(TaskName);
 console.info("开始任务");
 
@@ -106,7 +107,7 @@ function Run(LauchAPPName,IsSeparation) {
     )
   sleep(2000);
   //将京口令分段填入，只要里面的特征码即可，分不清什么是特征码的也可以整段放进来，注意用双引号和逗号隔开
-  Code=new Array("￥X8rtB93fDkiK￥","￥X8rtB93fDkiK￥");//邀请码第一个是助力作者，第二个纯属举例，使用时建议删除
+  Code=new Array("￥HE8UU2pMbrECMvG9￥");//邀请码第一个是助力作者，第二个纯属举例，使用时建议删除
   RunTime=Code.length;
   console.info("共识别到"+RunTime+"个助力码");
   for(var i = 0; i < RunTime; i++){
