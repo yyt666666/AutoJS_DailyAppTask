@@ -272,11 +272,11 @@ function Run(LauchAPPName, IsSeparation) {
           break;
         }
         else {
-          for (var i = 1; i < Buttons.length - 3; i++) {
+          for (var ii = 1; ii < Buttons.length - 3; ii++) {
             if (t == 1) {
               console.info("发现可收取点点券");
             }
-            let Button = Buttons[i]
+            let Button = Buttons[ii]
             ButtonText = Button.child(0).child(0).child(0).text()
             if (ButtonText.match(/[+][1-9].*/)) {
               console.log("第" + t + "次收点点券");
@@ -292,6 +292,10 @@ function Run(LauchAPPName, IsSeparation) {
                 console.log("收取成功");
                 sleep(500);
               }
+            }
+            else{
+              console.log("已无点点券收取");
+              break;
             }
             sleep(500);
           }
