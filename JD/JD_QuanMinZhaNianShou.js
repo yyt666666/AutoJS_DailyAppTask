@@ -11,6 +11,8 @@
   修改签到任务逻辑
   20221229 V1.3
   修改任务列表入口按钮
+  20221230 V1.4
+  修改品牌墙任务
 */
 var TaskName = "全民炸年兽"
 Start(TaskName);
@@ -662,7 +664,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         //跳过任务
         //if (taskText.match(/首页二屏/)) continue
         //if (taskText.match(/成功入会/)) continue
-        //if (taskText.match(/品牌墙店铺/)) continue
+        //if (taskTitle.match(/品牌墙/)) continue
         //if (taskText.match(/参与城城点击/)) continue
         //if (taskText.match(/去组队/)) continue
         //if (taskText.match(/小程序/)) continue
@@ -860,6 +862,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         if (taskTitle.match(/品牌墙/)) {
           if (!text("累计任务奖励").exists() && (textContains("消耗").exists())) {
             console.log("未识别到任务列表，尝试自动打开");
+            let taskListButton = textContains("消耗").findOne(10000)
             taskListButton.parent().parent().child(5).child(1).click();
             sleep(1000);
           }
