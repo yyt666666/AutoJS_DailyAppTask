@@ -3,6 +3,8 @@
 
   20221230 V1.0
   新增脚本
+  20221231 V1.1
+  增加黑号检测
 
 */
 var TaskName = "点点券-邀请助力"
@@ -244,13 +246,17 @@ function Run(LauchAPPName, IsSeparation) {
       }
     }
     //关闭邀请弹窗
-    while (true) {
+    for (var a = 0; a < 15; a++) {
       if (text("邀请好友 赢点点券").exists()) {
         console.log("关闭邀请弹窗");
         text("邀请好友 赢点点券").findOne().click();
         sleep(500);
         back();
         sleep(500);
+        break;
+      }
+      if (a == 10) {
+        console.log("超时，跳过收取动作");
         break;
       }
     }
@@ -262,54 +268,60 @@ function Run(LauchAPPName, IsSeparation) {
     else {
       console.log("当前账户已助力完成");
       Task_Log = Task_Log + "\n" + "当前账户已助力完成"
-      //收点券
-      console.info("待检测点点券可收取情况");
-      var t = 1
-      while (true) {
-        let Buttons = text("我的点点券").findOne(5000).parent().parent().parent().children()
-        if (Buttons.empty()) {
-          console.info("无点点券收取");
-          break;
-        }
-        else {
-          for (var ii = 1; ii < Buttons.length - 3; ii++) {
-            if (t == 1) {
-              console.info("发现可收取点点券");
-            }
-            let Button = Buttons[ii]
-            ButtonText = Button.child(0).child(0).child(0).text()
-            if (ButtonText.match(/[+][1-9].*/)) {
-              console.log("第" + t + "次收点点券");
-              t++;
-              Button.click();
-              sleep(100);
-              if (text("每日攒点点券").findOne(3000) == null) {
-                console.log("点击错误，返回");
-                back();
-                sleep(500);
+      if (a == 10) {
+        console.log("当前账号已黑，跳过收取动作");
+        Task_Log = Task_Log + "\n" + "当前账号已黑，跳过收取动作"
+      }
+      else {
+        //收点券
+        console.info("待检测点点券可收取情况");
+        var t = 1
+        while (true) {
+          let Buttons = text("我的点点券").findOne(5000).parent().parent().parent().children()
+          if (Buttons.empty()) {
+            console.info("无点点券收取");
+            break;
+          }
+          else {
+            for (var ii = 1; ii < Buttons.length - 3; ii++) {
+              if (t == 1) {
+                console.info("发现可收取点点券");
+              }
+              let Button = Buttons[ii]
+              ButtonText = Button.child(0).child(0).child(0).text()
+              if (ButtonText.match(/[+][1-9].*/)) {
+                console.log("第" + t + "次收点点券");
+                t++;
+                Button.click();
+                sleep(100);
+                if (text("每日攒点点券").findOne(3000) == null) {
+                  console.log("点击错误，返回");
+                  back();
+                  sleep(500);
+                }
+                else {
+                  console.log("收取成功");
+                  sleep(500);
+                }
               }
               else {
-                console.log("收取成功");
-                sleep(500);
+                console.log("已无点点券收取");
+                break;
               }
+              sleep(500);
             }
-            else{
-              console.log("已无点点券收取");
-              break;
-            }
-            sleep(500);
           }
+          sleep(1500);
+          break;
         }
-        sleep(1500);
-        break;
-      }
-      console.info("点点券收取完毕");
-      Task_Log = Task_Log + "\n" + "点点券收取完毕"
-      if (textContains("点点券将在7天内过期，快去使用吧").exists()) {
-        var log = textContains("点点券将在7天内过期，快去使用吧").findOne().text()
-        Task_Log = Task_Log + "\n" + "当前账号" + log.replace("您", "")
-        console.error("当前账号" + log.replace("您", ""));
-        sleep(2000);
+        console.info("点点券收取完毕");
+        Task_Log = Task_Log + "\n" + "点点券收取完毕"
+        if (textContains("点点券将在7天内过期，快去使用吧").exists()) {
+          var log = textContains("点点券将在7天内过期，快去使用吧").findOne().text()
+          Task_Log = Task_Log + "\n" + "当前账号" + log.replace("您", "")
+          console.error("当前账号" + log.replace("您", ""));
+          sleep(2000);
+        }
       }
       OutAPP(100);
     }
