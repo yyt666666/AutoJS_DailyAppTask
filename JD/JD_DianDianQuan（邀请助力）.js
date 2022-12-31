@@ -255,6 +255,14 @@ function Run(LauchAPPName, IsSeparation) {
         sleep(500);
         break;
       }
+      if (text("助力成功").exists()) {
+        console.log("关闭弹窗");
+        text("助力成功").findOne().parent().child(6).click();
+        sleep(500);
+        back();
+        sleep(500);
+        break;
+      }
       if (a == 10) {
         console.log("超时，跳过收取动作");
         break;
