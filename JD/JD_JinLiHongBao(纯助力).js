@@ -7,6 +7,8 @@
   读取脚本所在文件夹中的账号明细文件执行任务，具体见文件说明
   20220531 V1.2
   为ta助力改为坐标点击
+  20230103 V1.3
+  为ta助力改为控件点击
 */
 var TaskName = "锦鲤红包"
 Start(TaskName);
@@ -93,7 +95,7 @@ function Run(LauchAPPName,IsSeparation) {
     )
   sleep(2000);
   //将京口令分段填入，只要里面的特征码即可，分不清什么是特征码的也可以整段放进来，注意用双引号和逗号隔开
-  Code=new Array("5:/鶁高明威严的宇宙帅气深奥的电脑东，升级【最新版】婛諌，【红包】你有一个红包待领取，最高888元，快来看看吧！");//邀请码，多个账号例子："","",""
+  Code=new Array("￥F4PQDDATB0W￥");//邀请码，多个账号例子："","",""
   RunTime=Code.length;
   console.info("共识别到" + RunTime + "个助力码");
   for(var times = 0; times < RunTime; times++){
@@ -223,8 +225,8 @@ function Run(LauchAPPName,IsSeparation) {
           }
         }
         console.log("为TA助力");
-        //text("为TA助力").findOne().click();
-        click(textContains("为TA助力").findOne().bounds().centerX(),textContains("为TA助力").findOne().bounds().centerY())
+        text("为TA助力").findOne().click();
+        //click(textContains("为TA助力").findOne().bounds().centerX(),textContains("为TA助力").findOne().bounds().centerY())
         if(text("我也要开红包").findOne(2500) != null){
           console.info(text("我也要开红包").findOne().parent().child(2).text());
         }
@@ -233,8 +235,8 @@ function Run(LauchAPPName,IsSeparation) {
         break;
       } else if(textContains("为TA助力").exists()){
         console.log("为TA助力");
-        //text("为TA助力").findOne().click();
-        click(textContains("为TA助力").findOne().bounds().centerX(),textContains("为TA助力").findOne().bounds().centerY())
+        text("为TA助力").findOne().click();
+        //click(textContains("为TA助力").findOne().bounds().centerX(),textContains("为TA助力").findOne().bounds().centerY())
         for(var i = 0; !text("我也要开红包").exists(); i++){
           sleep(1000);
           if(i == 1){
