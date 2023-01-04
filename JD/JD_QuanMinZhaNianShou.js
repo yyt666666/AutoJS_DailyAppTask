@@ -1663,7 +1663,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
     }
 
     for (var i = 0; !text("累计任务奖励").exists(); i++) {
-      if (!text("累计任务奖励").exists() && textContains("消耗").exists()) {
+      if (!text("累计任务奖励").exists() && textContains("消耗").exists() && textContains("爆竹").exists()) {
         let taskListButton = textContains("消耗").findOne(10000)
         if (!taskListButton) {
           console.log("未能识别关键节点，退出当前任务");
