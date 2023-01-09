@@ -64,6 +64,8 @@
   新增浏览关注8s任务
   修复收取点点券时提示次数错误问题
   最后收取点点券时，增加返回页面顶部动作
+  20230109 V7.9
+  新增签到方式
 
 */
 var TaskName = "点点券"
@@ -731,6 +733,28 @@ function Run(LauchAPPName, IsSeparation, IsLotteryDraw) {
             return;
           }
         }
+        for (var i = 0; text("立即签到").exists(); i++) {
+          if (i == 0) {
+            console.log("立即签到");
+          }
+          //text("立即签到").findOne().click();
+          click(textContains("立即签到").findOne().bounds().centerX(),textContains("立即签到").findOne().bounds().centerY());
+          if (className("android.widget.ImageView").desc("关闭弹窗").findOne(2000) != null) {
+            console.log("签到完成");
+            className("android.widget.ImageView").desc("关闭弹窗").findOne().click();
+            console.log("关闭弹窗");
+          }
+          else {
+            console.error("签到未成功，重新签到")
+            swipe((device.width / 3) * 2, (device.height / 6), (device.width / 3) * 2, (device.height / 6) * 3, 500);  //向下滑动，确保是在顶部位置
+          }
+          sleep(1000);
+          if (i > 1) {
+            Task_Log = Task_Log + "\n" + "签到未成功，当前账号可能已火爆，跳过当前账号,即将退出任务"
+            console.error("签到未成功，当前账号可能已火爆，跳过当前账号")
+            return;
+          }
+        }
         if (className("android.view.View").desc("9.9下沉").exists() && IsLotteryDraw == 1) {
           console.log("券后9.9");
           className("android.view.View").desc("9.9下沉").findOne().parent().parent().click();
@@ -854,6 +878,28 @@ function Run(LauchAPPName, IsSeparation, IsLotteryDraw) {
             console.log("签到领奖励");
           }
           text("签到领奖励").findOne().parent().click();
+          if (className("android.widget.ImageView").desc("关闭弹窗").findOne(2000) != null) {
+            console.log("签到完成");
+            className("android.widget.ImageView").desc("关闭弹窗").findOne().click();
+            console.log("关闭弹窗");
+          }
+          else {
+            console.error("签到未成功，重新签到")
+            swipe((device.width / 3) * 2, (device.height / 6), (device.width / 3) * 2, (device.height / 6) * 3, 500);  //向下滑动，确保是在顶部位置
+          }
+          sleep(1000);
+          if (i > 1) {
+            Task_Log = Task_Log + "\n" + "签到未成功，当前账号可能已火爆，跳过当前账号,即将退出任务"
+            console.error("签到未成功，当前账号可能已火爆，跳过当前账号")
+            return;
+          }
+        }
+        for (var i = 0; text("立即签到").exists(); i++) {
+          if (i == 0) {
+            console.log("立即签到");
+          }
+          //text("立即签到").findOne().click();
+          click(textContains("立即签到").findOne().bounds().centerX(),textContains("立即签到").findOne().bounds().centerY())
           if (className("android.widget.ImageView").desc("关闭弹窗").findOne(2000) != null) {
             console.log("签到完成");
             className("android.widget.ImageView").desc("关闭弹窗").findOne().click();
