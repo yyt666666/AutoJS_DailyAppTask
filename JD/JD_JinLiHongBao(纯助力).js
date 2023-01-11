@@ -230,7 +230,7 @@ function Run(LauchAPPName, IsSeparation) {
         console.log("为TA助力");
         text("为TA助力").findOne().click();
         //click(textContains("为TA助力").findOne().bounds().centerX(),textContains("为TA助力").findOne().bounds().centerY())
-        slee(1000);
+        sleep(1000);
         console.log("助力完成");
         back();
         break;
@@ -248,7 +248,7 @@ function Run(LauchAPPName, IsSeparation) {
             return;
           }
         }
-        slee(1000);
+        sleep(1000);
         console.log("助力完成");
         back();
         break;
