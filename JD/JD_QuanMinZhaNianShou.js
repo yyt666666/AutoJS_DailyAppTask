@@ -16,6 +16,8 @@
   新增组队关键字
   20230104 V1.5
   新增参与游戏任务
+  20230112 V1.6
+  修复签到报错
 */
 var TaskName = "全民炸年兽"
 Start(TaskName);
@@ -521,7 +523,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         // console.log("明日再来");
         // textContains("明日再来").findOne().parent().child(1).click();
         console.log("已完成签到");
-        textContains("您已累计签到").findOne().parent().parent().parent().parent().parent().child(0).click();
+        textContains("来5天必得").findOnce().parent().parent().parent().child(0).child(0).click();
         IsSign = 1
       }
       if (textContains("点我签到").exists()) {
@@ -533,7 +535,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
         sleep(1000);
         IsSign = 1
         console.log("已完成签到");
-        textContains("您已累计签到").findOne().parent().parent().parent().parent().parent().child(0).click();
+        textContains("来5天必得").findOnce().parent().parent().parent().child(0).child(0).click();
       }
       sleep(1000);
       console.log("如还有弹窗，请手动处理");
@@ -556,10 +558,10 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       // }
       // if (textContains("明日再来").exists()) {
       //   console.log("明日再来");
-      //   textContains("您已累计签到").findOne().parent().parent().parent().parent().parent().child(0).click();
+      //   textContains("来5天必得").findOnce().parent().parent().parent().child(0).child(0).click();
       //   sleep(1000);
       // }
-      if (textContains("提醒我每天签到").findOne(3000) == null) {
+      if (textContains("来5天必得").findOne(3000) == null) {
         back();
         sleep(1500);
       }
@@ -576,7 +578,7 @@ function Run(LauchAPPName, IsSeparation, IsInvite, IsJoinMember) {
       }
       sleep(1000);
       console.log("关闭签到页面");
-      textContains("您已累计签到").findOnce().parent().parent().parent().parent().parent().child(0).click();
+      textContains("来5天必得").findOnce().parent().parent().parent().child(0).child(0).click();
     }
     if (text("点击领取").exists()) {
       console.log("爆竹已存满");
