@@ -66,6 +66,8 @@
   最后收取点点券时，增加返回页面顶部动作
   20230109 V7.9
   新增签到方式
+  20230117 V8.0
+  修改收取点点券判断
 
 */
 var TaskName = "点点券"
@@ -225,13 +227,14 @@ function Run(LauchAPPName, IsSeparation, IsLotteryDraw) {
     console.info("待检测点点券可收取情况");
     sleep(500);
     var t = 1
+    var ii = 2
     while (text("待收取").exists() | text("领取任务").exists() | text("继续完成").exists()) {//增加2次弹出的任务关键字，避免提前跳出循环
       let Buttons = text("我的点点券").findOne(5000).parent().parent().parent().children()
       if (Buttons.empty()) {
         console.info("无点点券收取");
       }
       else {
-        for (var i = 1; i < Buttons.length - 3; i++) {
+        for (var i = 1; i < Buttons.length - ii; i++) {
           if (t == 1) {
             console.info("发现可收取点点券");
           }
@@ -268,6 +271,15 @@ function Run(LauchAPPName, IsSeparation, IsLotteryDraw) {
           }
           sleep(500);
         }
+
+      }
+      if(t > 2){
+        //如果收取点点券异常，则多跳过一个悬浮气泡
+        ii = 3
+      }
+      if(t > 3){
+        Task_Log = Task_Log + "\n" + "收取点点券异常"
+        console.info("收取点点券异常");
       }
       sleep(1500);
       console.log("返回页面顶部");
