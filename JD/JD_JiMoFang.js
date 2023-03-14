@@ -70,6 +70,8 @@
   取消打开任务列表动作，修改返回判断关键字
   20220814 V2.8
   修改逛一逛任务
+  20230314 V2.9
+  针对所有可兑换的礼品进行兑换
  */
 var TaskName = "集魔方"
 Start(TaskName);
@@ -569,10 +571,107 @@ function Run(LauchAPPName,IsSeparation,IsJoinMember,IsExchange){
           textStartsWith("魔方碎片进度").findOne().parent().child(5).click();
         }
         sleep(1000);
+
+        if(text("9京豆").findOne(3000) != null){
+          sleep(1500);
+          text("9京豆").findOne().parent().parent().parent().child(3).child(0).click();
+          if(text("兑换将消耗3魔方哦").findOne(3000) != null){
+            console.log("确认");
+            text("确认").findOne().click()
+            sleep(1000);
+            if(text("查看我的兑换 >").findOne(3000) != null){
+              var LotteryResults = text("查看我的兑换 >").findOne().parent().parent().child(0).text()
+              if(LotteryResults == "很遗憾没有抽中"){
+                LotteryResults = "未中奖"
+              }
+              else if(LotteryResults == "兑换成功,获得"){
+                if(text("兑换成功,获得").findOne().parent().child(1).childCount() == 2){
+                  LotteryResults = "兑换成功，获得" + text("兑换成功,获得").findOne().parent().child(1).child(1).text()
+                }
+                else if(text("兑换成功,获得").findOne().parent().child(1).childCount() == 1){
+                  LotteryResults = "兑换成功，获得" + text("兑换成功,获得").findOne().parent().child(1).child(0).text()
+                }
+              }
+              Task_Log = Task_Log + "\n" + "兑换结果：" + LotteryResults
+              console.log("兑换结果：" + LotteryResults);
+              sleep(1000);
+              text("查看我的兑换 >").findOne().parent().child(0).click();
+              sleep(500);
+            }
+          }
+          else{
+            Task_Log = Task_Log + "\n" + "未成功兑换"
+            console.log("未成功兑换");
+          }
+        }
         if(text("3/10京豆").findOne(3000) != null){
           sleep(1500);
           text("3/10京豆").findOne().parent().parent().child(2).child(0).click();
           if(text("兑换将消耗1魔方哦").findOne(3000) != null){
+            console.log("确认");
+            text("确认").findOne().click()
+            sleep(1000);
+            if(text("查看我的兑换 >").findOne(3000) != null){
+              var LotteryResults = text("查看我的兑换 >").findOne().parent().parent().child(0).text()
+              if(LotteryResults == "很遗憾没有抽中"){
+                LotteryResults = "未中奖"
+              }
+              else if(LotteryResults == "兑换成功,获得"){
+                if(text("兑换成功,获得").findOne().parent().child(1).childCount() == 2){
+                  LotteryResults = "兑换成功，获得" + text("兑换成功,获得").findOne().parent().child(1).child(1).text()
+                }
+                else if(text("兑换成功,获得").findOne().parent().child(1).childCount() == 1){
+                  LotteryResults = "兑换成功，获得" + text("兑换成功,获得").findOne().parent().child(1).child(0).text()
+                }
+              }
+              Task_Log = Task_Log + "\n" + "兑换结果：" + LotteryResults
+              console.log("兑换结果：" + LotteryResults);
+              sleep(1000);
+              text("查看我的兑换 >").findOne().parent().child(0).click();
+              sleep(500);
+            }
+          }
+          else{
+            Task_Log = Task_Log + "\n" + "未成功兑换"
+            console.log("未成功兑换");
+          }
+        }
+        if(text("6京豆").findOne(3000) != null){
+          sleep(1500);
+          text("6京豆").findOne().parent().parent().parent().child(3).child(0).click();
+          if(text("兑换将消耗3魔方哦").findOne(3000) != null){
+            console.log("确认");
+            text("确认").findOne().click()
+            sleep(1000);
+            if(text("查看我的兑换 >").findOne(3000) != null){
+              var LotteryResults = text("查看我的兑换 >").findOne().parent().parent().child(0).text()
+              if(LotteryResults == "很遗憾没有抽中"){
+                LotteryResults = "未中奖"
+              }
+              else if(LotteryResults == "兑换成功,获得"){
+                if(text("兑换成功,获得").findOne().parent().child(1).childCount() == 2){
+                  LotteryResults = "兑换成功，获得" + text("兑换成功,获得").findOne().parent().child(1).child(1).text()
+                }
+                else if(text("兑换成功,获得").findOne().parent().child(1).childCount() == 1){
+                  LotteryResults = "兑换成功，获得" + text("兑换成功,获得").findOne().parent().child(1).child(0).text()
+                }
+              }
+              Task_Log = Task_Log + "\n" + "兑换结果：" + LotteryResults
+              console.log("兑换结果：" + LotteryResults);
+              sleep(1000);
+              text("查看我的兑换 >").findOne().parent().child(0).click();
+              sleep(500);
+            }
+          }
+          else{
+            Task_Log = Task_Log + "\n" + "未成功兑换"
+            console.log("未成功兑换");
+          }
+        }
+        if(text("20/72京豆").findOne(3000) != null){
+          sleep(1500);
+          text("20/72京豆").findOne().parent().parent().child(2).child(0).click();
+          if(text("兑换将消耗6魔方哦").findOne(3000) != null){
             console.log("确认");
             text("确认").findOne().click()
             sleep(1000);
